@@ -4,8 +4,9 @@ A Next.js 14 TypeScript template with Tailwind CSS, ESLint, and App Router confi
 
 ## Prerequisites
 
-- Node.js 18.17 or later
+- Node.js 20 or later
 - npm, yarn, or pnpm
+- nvm (recommended for managing Node.js versions)
 
 ## Installation
 
@@ -14,6 +15,11 @@ Clone the repository and install dependencies:
 ```bash
 git clone <repository-url>
 cd ai-template
+
+# If using nvm, switch to Node.js 20
+nvm use
+
+# Install dependencies
 npm install
 ```
 
@@ -61,7 +67,8 @@ npm run lint
 
 ## Tech Stack
 
-- **Framework**: Next.js 14
+- **Framework**: Next.js 16
 - **Language**: TypeScript
+- **UI Library**: React 19
 - **Styling**: Tailwind CSS
 - **Linting**: ESLint with Next.js config
