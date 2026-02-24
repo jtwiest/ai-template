@@ -7,7 +7,7 @@ export default function ChatPage() {
   const {
     sessions,
     currentSession,
-    loading,
+    streaming,
     createSession,
     setCurrentSession,
     sendMessage,
@@ -48,7 +48,7 @@ export default function ChatPage() {
         onCreateSession={handleCreateSession}
         onSelectSession={handleSelectSession}
         onSendMessage={handleSendMessage}
-        isThinking={loading}
+        isThinking={streaming}
       />
     </div>
   )

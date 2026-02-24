@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Title is required' }, { status: 400 });
     }
 
-    const session = await chatStorage.createSession({ title });
+    const session = await chatStorage.createSession({ title, messages: [] });
     return NextResponse.json(session, { status: 201 });
   } catch (error) {
     console.error('Failed to create session:', error);

@@ -48,8 +48,8 @@ export class FileSystemChatStorage implements ChatStorage {
     const newSession: ChatSession = {
       ...session,
       id: `session-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+      createdAt: new Date(),
+      updatedAt: new Date(),
     };
     sessions.push(newSession);
     await writeJSONFile(this.sessionsFile, sessions);
@@ -70,7 +70,7 @@ export class FileSystemChatStorage implements ChatStorage {
       ...sessions[index],
       ...updates,
       id: sessionId, // Prevent ID override
-      updatedAt: new Date().toISOString(),
+      updatedAt: new Date(),
     };
 
     await writeJSONFile(this.sessionsFile, sessions);
@@ -103,7 +103,7 @@ export class FileSystemChatStorage implements ChatStorage {
     const newMessage: Message = {
       ...message,
       id: `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-      timestamp: new Date().toISOString(),
+      timestamp: new Date(),
     };
     messages.push(newMessage);
 
@@ -150,8 +150,8 @@ export class FileSystemArtifactStorage implements ArtifactStorage {
     const newArtifact: Artifact = {
       ...artifact,
       id: `artifact-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+      createdAt: new Date(),
+      updatedAt: new Date(),
     };
     artifacts.push(newArtifact);
     await writeJSONFile(this.artifactsFile, artifacts);
@@ -167,7 +167,7 @@ export class FileSystemArtifactStorage implements ArtifactStorage {
       ...artifacts[index],
       ...updates,
       id: artifactId, // Prevent ID override
-      updatedAt: new Date().toISOString(),
+      updatedAt: new Date(),
     };
 
     await writeJSONFile(this.artifactsFile, artifacts);
@@ -225,7 +225,7 @@ export class FileSystemWorkflowStorage implements WorkflowStorage {
     const newRun: WorkflowRun = {
       ...run,
       id: `run-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-      startedAt: new Date().toISOString(),
+      startedAt: new Date(),
     };
     runs.push(newRun);
     await writeJSONFile(this.runsFile, runs);
@@ -253,29 +253,16 @@ export class FileSystemWorkflowStorage implements WorkflowStorage {
         id: 'data-processor',
         name: 'Data Processor',
         description: 'Process and transform data files',
-        parameters: {
-          inputFile: { type: 'string', description: 'Path to input file' },
-          outputFormat: { type: 'string', description: 'Output format (json, csv, xml)' },
-        },
       },
       {
         id: 'report-generator',
         name: 'Report Generator',
         description: 'Generate reports from data sources',
-        parameters: {
-          dataSource: { type: 'string', description: 'Data source identifier' },
-          reportType: { type: 'string', description: 'Type of report to generate' },
-          dateRange: { type: 'string', description: 'Date range for report' },
-        },
       },
       {
         id: 'batch-processor',
         name: 'Batch Processor',
         description: 'Process multiple items in batch',
-        parameters: {
-          items: { type: 'array', description: 'Array of items to process' },
-          concurrency: { type: 'number', description: 'Number of concurrent operations' },
-        },
       },
     ];
   }

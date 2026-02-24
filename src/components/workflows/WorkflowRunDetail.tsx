@@ -92,7 +92,7 @@ export function WorkflowRunDetail({ run, open, onClose }: WorkflowRunDetailProps
             </pre>
           </div>
 
-          {run.result && (
+          {run.result !== undefined && (
             <>
               <Separator />
               <div>

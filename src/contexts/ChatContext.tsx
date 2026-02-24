@@ -8,6 +8,7 @@ interface ChatContextType {
   currentSession: ChatSession | null;
   messages: Message[];
   loading: boolean;
+  streaming: boolean;
   error: string | null;
 
   // Session operations
@@ -29,6 +30,7 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
   const [currentSession, setCurrentSessionState] = useState<ChatSession | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(false);
+  const [streaming, setStreaming] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   // Load all sessions
@@ -154,40 +156,94 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
 
     try {
       setLoading(true);
+      setStreaming(true);
       setError(null);
 
-      // Add user message
-      const userResponse = await fetch(`/api/chat/sessions/${targetSessionId}/messages`, {
+      // Create optimistic user message
+      const optimisticUserMessage: Message = {
+        id: `temp-${Date.now()}`,
+        role: 'user',
+        content,
+        timestamp: new Date(),
+      };
+      setMessages(prev => [...prev, optimisticUserMessage]);
+
+      // Create optimistic assistant message for streaming
+      const assistantMessageId = `temp-assistant-${Date.now()}`;
+      const optimisticAssistantMessage: Message = {
+        id: assistantMessageId,
+        role: 'assistant',
+        content: '',
+        timestamp: new Date(),
+      };
+      setMessages(prev => [...prev, optimisticAssistantMessage]);
+
+      // Stream the AI response
+      const response = await fetch('/api/chat/stream', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ role: 'user', content }),
+        body: JSON.stringify({
+          sessionId: targetSessionId,
+          messages: [{ role: 'user', content }],
+        }),
       });
-      if (!userResponse.ok) throw new Error('Failed to send message');
-      const userMessage = await userResponse.json();
-      setMessages(prev => [...prev, userMessage]);
 
-      // TODO: In Phase 3, this will call the AI API and stream the response
-      // For now, we'll add a mock assistant response
-      setTimeout(async () => {
-        const assistantResponse = await fetch(`/api/chat/sessions/${targetSessionId}/messages`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            role: 'assistant',
-            content: 'This is a mock response. AI integration will be added in Phase 3.',
-          }),
-        });
-        if (assistantResponse.ok) {
-          const assistantMessage = await assistantResponse.json();
-          setMessages(prev => [...prev, assistantMessage]);
+      if (!response.ok) {
+        throw new Error('Failed to get AI response');
+      }
+
+      const reader = response.body?.getReader();
+      const decoder = new TextDecoder();
+
+      if (!reader) {
+        throw new Error('No response stream available');
+      }
+
+      let accumulatedContent = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        const chunk = decoder.decode(value, { stream: true });
+        const lines = chunk.split('\n');
+
+        for (const line of lines) {
+          if (line.startsWith('0:')) {
+            // Text delta from AI SDK
+            try {
+              const jsonStr = line.substring(2);
+              const parsed = JSON.parse(jsonStr);
+              if (parsed && typeof parsed === 'string') {
+                accumulatedContent += parsed;
+
+                // Update the assistant message with accumulated content
+                setMessages(prev =>
+                  prev.map(msg =>
+                    msg.id === assistantMessageId
+                      ? { ...msg, content: accumulatedContent }
+                      : msg
+                  )
+                );
+              }
+            } catch (e) {
+              // Skip malformed JSON
+            }
+          }
         }
-      }, 1000);
+      }
+
+      // Reload messages from server to get the saved versions with proper IDs
+      await loadMessages(targetSessionId);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to send message');
+      // Remove optimistic messages on error
+      setMessages(prev => prev.filter(msg => !msg.id.startsWith('temp-')));
     } finally {
       setLoading(false);
+      setStreaming(false);
     }
-  }, [currentSession]);
+  }, [currentSession, loadMessages]);
 
   // Load sessions on mount
   useEffect(() => {
@@ -199,6 +255,7 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
     currentSession,
     messages,
     loading,
+    streaming,
     error,
     loadSessions,
     createSession,

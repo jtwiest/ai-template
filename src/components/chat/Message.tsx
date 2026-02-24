@@ -1,10 +1,11 @@
 "use client"
 
+import { useState } from "react"
 import { Message as MessageType } from "@/lib/types"
 import { cn } from "@/lib/utils"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
-import { Copy } from "lucide-react"
+import { Copy, ChevronDown, ChevronUp, Lightbulb, Wrench } from "lucide-react"
 
 interface MessageProps {
   message: MessageType
@@ -12,6 +13,8 @@ interface MessageProps {
 
 export function Message({ message }: MessageProps) {
   const isUser = message.role === "user"
+  const [showThinking, setShowThinking] = useState(false)
+  const [showTools, setShowTools] = useState(false)
 
   const handleCopy = () => {
     navigator.clipboard.writeText(message.content)
@@ -51,14 +54,68 @@ export function Message({ message }: MessageProps) {
         </div>
 
         {message.thinking && message.thinking.length > 0 && (
-          <div className="text-xs text-muted-foreground border-l-2 pl-3 space-y-1">
-            {message.thinking.map((step) => (
-              <p key={step.id}>{step.content}</p>
-            ))}
+          <div className="mt-2">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-6 px-2 text-xs text-muted-foreground"
+              onClick={() => setShowThinking(!showThinking)}
+            >
+              <Lightbulb className="h-3 w-3 mr-1" />
+              Thinking ({message.thinking.length})
+              {showThinking ? (
+                <ChevronUp className="h-3 w-3 ml-1" />
+              ) : (
+                <ChevronDown className="h-3 w-3 ml-1" />
+              )}
+            </Button>
+            {showThinking && (
+              <div className="text-xs text-muted-foreground border-l-2 border-primary/30 pl-3 mt-2 space-y-1">
+                {message.thinking.map((step) => (
+                  <p key={step.id} className="py-1">{step.content}</p>
+                ))}
+              </div>
+            )}
           </div>
         )}
 
-        <p className="text-xs text-muted-foreground">
+        {message.toolCalls && message.toolCalls.length > 0 && (
+          <div className="mt-2">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-6 px-2 text-xs text-muted-foreground"
+              onClick={() => setShowTools(!showTools)}
+            >
+              <Wrench className="h-3 w-3 mr-1" />
+              Tools ({message.toolCalls.length})
+              {showTools ? (
+                <ChevronUp className="h-3 w-3 ml-1" />
+              ) : (
+                <ChevronDown className="h-3 w-3 ml-1" />
+              )}
+            </Button>
+            {showTools && (
+              <div className="text-xs border-l-2 border-blue-500/30 pl-3 mt-2 space-y-2">
+                {message.toolCalls.map((tool) => (
+                  <div key={tool.id} className="space-y-1">
+                    <p className="font-medium text-foreground">{tool.name}</p>
+                    <pre className="text-muted-foreground bg-muted/50 p-2 rounded text-xs overflow-x-auto">
+                      {JSON.stringify(tool.arguments, null, 2)}
+                    </pre>
+                    {tool.result !== undefined && (
+                      <pre className="text-muted-foreground bg-muted/30 p-2 rounded text-xs overflow-x-auto">
+                        {JSON.stringify(tool.result, null, 2)}
+                      </pre>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        <p className="text-xs text-muted-foreground mt-2">
           {new Date(message.timestamp).toLocaleTimeString()}
         </p>
       </div>

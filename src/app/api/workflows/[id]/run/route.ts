@@ -36,7 +36,7 @@ export async function POST(
         setTimeout(async () => {
           await workflowStorage.updateRun(run.id, {
             status: 'completed',
-            completedAt: new Date().toISOString(),
+            completedAt: new Date(),
             result: {
               message: 'Workflow completed successfully (simulated)',
               parameters,
