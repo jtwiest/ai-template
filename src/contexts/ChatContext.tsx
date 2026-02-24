@@ -168,16 +168,6 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
       };
       setMessages(prev => [...prev, optimisticUserMessage]);
 
-      // Create optimistic assistant message for streaming
-      const assistantMessageId = `temp-assistant-${Date.now()}`;
-      const optimisticAssistantMessage: Message = {
-        id: assistantMessageId,
-        role: 'assistant',
-        content: '',
-        timestamp: new Date(),
-      };
-      setMessages(prev => [...prev, optimisticAssistantMessage]);
-
       // Stream the AI response
       const response = await fetch('/api/chat/stream', {
         method: 'POST',
@@ -200,6 +190,8 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
       }
 
       let accumulatedContent = '';
+      const assistantMessageId = `temp-assistant-${Date.now()}`;
+      let assistantMessageAdded = false;
 
       while (true) {
         const { done, value } = await reader.read();
@@ -217,14 +209,26 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
               if (parsed && typeof parsed === 'string') {
                 accumulatedContent += parsed;
 
-                // Update the assistant message with accumulated content
-                setMessages(prev =>
-                  prev.map(msg =>
-                    msg.id === assistantMessageId
-                      ? { ...msg, content: accumulatedContent }
-                      : msg
-                  )
-                );
+                // Add assistant message on first content received
+                if (!assistantMessageAdded) {
+                  const optimisticAssistantMessage: Message = {
+                    id: assistantMessageId,
+                    role: 'assistant',
+                    content: accumulatedContent,
+                    timestamp: new Date(),
+                  };
+                  setMessages(prev => [...prev, optimisticAssistantMessage]);
+                  assistantMessageAdded = true;
+                } else {
+                  // Update the assistant message with accumulated content
+                  setMessages(prev =>
+                    prev.map(msg =>
+                      msg.id === assistantMessageId
+                        ? { ...msg, content: accumulatedContent }
+                        : msg
+                    )
+                  );
+                }
               }
             } catch (e) {
               // Skip malformed JSON
