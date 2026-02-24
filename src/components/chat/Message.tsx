@@ -2,10 +2,11 @@
 
 import { useState } from "react"
 import { Message as MessageType } from "@/lib/types"
-import { cn } from "@/lib/utils"
+import { cn, segmentTextWithArtifacts } from "@/lib/utils"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Copy, ChevronDown, ChevronUp, Lightbulb, Wrench } from "lucide-react"
+import { ArtifactLink } from "./ArtifactLink"
 
 interface MessageProps {
   message: MessageType
@@ -19,6 +20,9 @@ export function Message({ message }: MessageProps) {
   const handleCopy = () => {
     navigator.clipboard.writeText(message.content)
   }
+
+  // Parse message content for artifact references
+  const contentSegments = segmentTextWithArtifacts(message.content)
 
   return (
     <div
@@ -40,7 +44,18 @@ export function Message({ message }: MessageProps) {
               {isUser ? "You" : "Assistant"}
             </p>
             <div className="prose prose-sm dark:prose-invert max-w-none">
-              {message.content}
+              {contentSegments.map((segment, index) => {
+                if (segment.type === 'artifact' && segment.artifactId && segment.displayText) {
+                  return (
+                    <ArtifactLink
+                      key={index}
+                      artifactId={segment.artifactId}
+                      displayText={segment.displayText}
+                    />
+                  )
+                }
+                return <span key={index}>{segment.content}</span>
+              })}
             </div>
           </div>
           <Button

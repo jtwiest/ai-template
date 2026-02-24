@@ -343,25 +343,66 @@ src/
 
 ---
 
-## Phase 4: Artifacts Integration ⬅️ NEXT PHASE
+## Phase 4: Artifacts Integration ✅ COMPLETED
 
 ### 4.1 Agent Access to Artifacts
 
-- Provide tool/function for agent to read artifacts by ID or search
-- Provide tool/function for agent to create new artifacts
-- Provide tool/function for agent to update existing artifacts
-- Implement version history for artifacts (optional)
+✅ Implemented:
+- [x] Tool for agent to search artifacts by query string
+- [x] Tool for agent to read artifacts by ID
+- [x] Tool for agent to create new artifacts with title, content, and tags
+- [x] Tool for agent to update existing artifacts (title, content, or tags)
 
 ### 4.2 Linking Chat & Artifacts
 
-- Reference artifacts in chat messages (e.g., `[artifact:id]` syntax)
-- Create artifact from chat button
-- Open artifact from chat reference (clickable links)
-- Show artifact preview in chat when referenced
+✅ Implemented:
+- [x] Reference artifacts in chat messages using `[artifact:id]` or `[artifact:id|display text]` syntax
+- [x] Parse and render artifact references as clickable links in Message component
+- [x] Open artifact from chat reference (links to `/artifacts?id={artifactId}`)
+- [x] Show artifact preview in chat when referenced (expandable with title, content excerpt, and tags)
+
+### Phase 4 Completion Summary
+
+**What Was Built:**
+
+#### AI Tools for Artifacts ([src/app/api/chat/stream/route.ts](src/app/api/chat/stream/route.ts))
+- **searchArtifacts**: Search for artifacts by query string (searches in title, content, and tags)
+- **getArtifact**: Get a specific artifact by ID to read its full content
+- **createArtifact**: Create a new artifact with title, content, and optional tags
+- **updateArtifact**: Update an existing artifact (title, content, and/or tags)
+- Tool calls and results are saved in message metadata for display in UI
+
+#### Artifact Reference Parsing ([src/lib/utils.ts](src/lib/utils.ts))
+- `parseArtifactReferences()`: Extract artifact references from text using regex
+- `segmentTextWithArtifacts()`: Split text into segments with artifact references identified
+- Supports two formats:
+  - `[artifact:id]` - Simple reference with default "artifact" display text
+  - `[artifact:id|Custom Name]` - Reference with custom display text
+
+#### Artifact Link Component ([src/components/chat/ArtifactLink.tsx](src/components/chat/ArtifactLink.tsx))
+- Renders artifact references as clickable links
+- Shows "not found" message for invalid artifact IDs
+- Expandable preview showing:
+  - Artifact title
+  - Content excerpt (first 300 characters)
+  - Tags with badges
+- Links to artifact detail page with ID in query params
+
+#### Enhanced Message Component ([src/components/chat/Message.tsx](src/components/chat/Message.tsx))
+- Parses message content for artifact references
+- Renders text segments with embedded ArtifactLink components
+- Maintains existing functionality (thinking steps, tool calls, copy button)
+
+**Current State:**
+- AI agent can now perform full CRUD operations on artifacts during conversations
+- Users can reference artifacts in chat using simple syntax
+- Artifact references are interactive and show previews
+- All features build successfully with TypeScript
+- Ready for Phase 5: Workflows Integration
 
 ---
 
-## Phase 5: Workflows Integration
+## Phase 5: Workflows Integration ⬅️ NEXT PHASE
 
 ### 5.1 Temporal Setup
 
@@ -429,24 +470,26 @@ src/
 
 ## Current Status
 
-- **Phase**: Phase 3 Complete ✅ - Moving to Phase 4
+- **Phase**: Phase 4 Complete ✅ - Moving to Phase 5
 - **Completed**:
   - Phase 1: Full UI scaffolding with all three main features
   - Phase 2: Data layer, state management, and API routes
   - Phase 3: AI integration with streaming chat responses
+  - Phase 4: Artifacts integration with AI agent and chat linking
 - **Features Working**:
-  - Chat: Real AI conversations with Claude 3.5 Sonnet, streaming responses, session management
-  - Artifacts: Full CRUD operations with search
-  - Workflows: Run execution with status tracking and polling
+  - Chat: Real AI conversations with Claude Opus 4.6, streaming responses, session management, artifact tools
+  - Artifacts: Full CRUD operations with search, AI agent access, chat references with previews
+  - Workflows: Run execution with status tracking and polling (UI only, backend pending)
 - **Next Steps**:
-  1. Provide agent tools to read/search artifacts
-  2. Provide agent tools to create/update artifacts
-  3. Link chat and artifacts (reference syntax, previews)
-  4. Implement artifact version history (optional)
+  1. Set up Temporal SDK for workflow orchestration
+  2. Create sample workflows (e.g., data processing, report generation)
+  3. Implement workflow execution with real Temporal backend
+  4. Integrate workflows with AI agent (tools to trigger workflows)
+  5. Store workflow results as artifacts automatically
 - **Development Server**: http://localhost:3000 (user-managed)
 - **Node Version**: 20.20.0 (required by Next.js 16)
 - **Data Storage**: File system (JSON) in `data/` directory
-- **AI Provider**: Anthropic Claude 3.5 Sonnet via Vercel AI SDK
+- **AI Provider**: Anthropic Claude Opus 4.6 via Vercel AI SDK
 
 ---
 

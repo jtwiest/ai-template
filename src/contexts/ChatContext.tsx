@@ -201,6 +201,10 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
         const lines = chunk.split('\n');
 
         for (const line of lines) {
+          if (!line.trim()) continue; // Skip empty lines
+
+          console.log('Stream line:', line); // Debug logging
+
           if (line.startsWith('0:')) {
             // Text delta from AI SDK
             try {
