@@ -47,29 +47,40 @@
     --radius: 0.5rem;
   }
   .dark {
-    --background: 0 0% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 0 0% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 0 0% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 0 0% 9%;
-    --secondary: 0 0% 14.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 0 0% 14.9%;
-    --muted-foreground: 0 0% 63.9%;
-    --accent: 0 0% 14.9%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 14.9%;
-    --input: 0 0% 14.9%;
-    --ring: 0 0% 83.1%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
+    /* Warm Coral Dark Theme - Professional & Inviting */
+    --background: 215 25% 10%;        /* App frame #141A22 */
+    --foreground: 210 18% 93%;        /* Primary text #E8EDF2 */
+
+    --card: 215 20% 14%;              /* Surface cards/panels #1B2430 */
+    --card-foreground: 210 18% 93%;   /* Text on cards */
+
+    --popover: 215 18% 18%;           /* Elevated modals #232E3C */
+    --popover-foreground: 210 18% 93%;
+
+    --primary: 12 80% 62%;            /* Coral primary button #F97360 */
+    --primary-foreground: 210 18% 93%; /* Light text on primary */
+
+    --secondary: 215 18% 18%;         /* Elevated surface */
+    --secondary-foreground: 210 18% 93%;
+
+    --muted: 215 18% 18%;             /* Elevated surface */
+    --muted-foreground: 210 10% 55%;  /* Muted text #7D8896 */
+
+    --accent: 35 85% 60%;             /* Tangerine accent #F59E42 */
+    --accent-foreground: 215 25% 10%; /* Dark text on accent */
+
+    --destructive: 0 84% 60%;         /* Red for errors */
+    --destructive-foreground: 210 18% 93%;
+
+    --border: 215 12% 26%;            /* Border/divider #384556 */
+    --input: 215 20% 14%;             /* Input backgrounds - surface */
+    --ring: 12 80% 62%;               /* Focus ring - coral */
+
+    /* Chart colors - warm and cohesive */
+    --chart-1: 12 80% 62%;            /* Coral */
+    --chart-2: 155 45% 48%;           /* Tech green #3BAA84 */
+    --chart-3: 35 85% 60%;            /* Tangerine */
+    --chart-4: 43 96% 56%;            /* Yellow */
+    --chart-5: 280 65% 60%;           /* Purple */
   }
 }
