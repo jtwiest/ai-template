@@ -75,12 +75,17 @@ export function ChatContainer({
             <MessageInput onSendMessage={onSendMessage} disabled={isThinking} />
           </>
         ) : (
-          <div className="flex-1 flex items-center justify-center text-muted-foreground">
-            <div className="text-center">
-              <MessageSquare className="h-12 w-12 mx-auto mb-4 opacity-50" />
-              <p>Select a conversation or start a new chat</p>
+          <>
+            <div className="flex-1 flex items-center justify-center text-muted-foreground">
+              <div className="text-center max-w-md px-4">
+                <MessageSquare className="h-16 w-16 mx-auto mb-6 opacity-50" />
+                <h2 className="text-2xl font-semibold mb-3 text-foreground">Welcome to AI Chat</h2>
+                <p className="mb-4">Start a conversation by typing a message below, or select an existing chat from the sidebar.</p>
+                <p className="text-sm">Your first message will automatically create a new chat session.</p>
+              </div>
             </div>
-          </div>
+            <MessageInput onSendMessage={onSendMessage} disabled={isThinking} />
+          </>
         )}
       </Card>
     </div>

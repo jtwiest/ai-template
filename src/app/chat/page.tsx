@@ -1,6 +1,5 @@
 "use client"
 
-import { useEffect } from "react"
 import { ChatContainer } from "@/components/chat/ChatContainer"
 import { useChatContext } from "@/contexts"
 
@@ -14,13 +13,6 @@ export default function ChatPage() {
     sendMessage,
   } = useChatContext()
 
-  // Create a default session if none exist
-  useEffect(() => {
-    if (!loading && sessions.length === 0) {
-      createSession("Welcome Chat")
-    }
-  }, [loading, sessions.length, createSession])
-
   const handleCreateSession = async () => {
     const newSession = await createSession("New Chat")
     await setCurrentSession(newSession.id)
@@ -31,7 +23,20 @@ export default function ChatPage() {
   }
 
   const handleSendMessage = async (content: string) => {
-    await sendMessage(content)
+    try {
+      // Create a session if none exists
+      if (!currentSession) {
+        const newSession = await createSession("New Chat")
+        await setCurrentSession(newSession.id)
+        // Send message with the new session ID
+        await sendMessage(content, newSession.id)
+      } else {
+        // Send message to current session
+        await sendMessage(content)
+      }
+    } catch (error) {
+      console.error("Failed to send message:", error)
+    }
   }
 
   return (

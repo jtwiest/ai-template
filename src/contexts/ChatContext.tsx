@@ -18,7 +18,7 @@ interface ChatContextType {
   updateSessionTitle: (sessionId: string, title: string) => Promise<void>;
 
   // Message operations
-  sendMessage: (content: string) => Promise<void>;
+  sendMessage: (content: string, sessionId?: string) => Promise<void>;
   loadMessages: (sessionId: string) => Promise<void>;
 }
 
@@ -144,8 +144,10 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   // Send a message
-  const sendMessage = useCallback(async (content: string) => {
-    if (!currentSession) {
+  const sendMessage = useCallback(async (content: string, sessionId?: string) => {
+    const targetSessionId = sessionId || currentSession?.id;
+
+    if (!targetSessionId) {
       setError('No session selected');
       return;
     }
@@ -155,7 +157,7 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
       setError(null);
 
       // Add user message
-      const userResponse = await fetch(`/api/chat/sessions/${currentSession.id}/messages`, {
+      const userResponse = await fetch(`/api/chat/sessions/${targetSessionId}/messages`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ role: 'user', content }),
@@ -167,7 +169,7 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
       // TODO: In Phase 3, this will call the AI API and stream the response
       // For now, we'll add a mock assistant response
       setTimeout(async () => {
-        const assistantResponse = await fetch(`/api/chat/sessions/${currentSession.id}/messages`, {
+        const assistantResponse = await fetch(`/api/chat/sessions/${targetSessionId}/messages`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
