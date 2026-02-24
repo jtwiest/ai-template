@@ -2,7 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Font families configured via Next.js font optimization */
+/* Font families configured via Next.js font optimization
+ * IBM Plex Sans - Neutral, modern UI with personality
+ * IBM Plex Mono - Clear code/text alignment
+ */
 
 :root {
   --foreground-rgb: 0, 0, 0;

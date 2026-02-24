@@ -10,8 +10,8 @@ const config: Config = {
   theme: {
   	extend: {
   		fontFamily: {
-  			sans: ['var(--font-inter)', 'sans-serif'],
-  			mono: ['var(--font-source-code-pro)', 'monospace'],
+  			sans: ['var(--font-ibm-plex-sans)', 'sans-serif'],
+  			mono: ['var(--font-ibm-plex-mono)', 'monospace'],
   		},
   		backgroundImage: {
   			'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
