@@ -1,7 +1,6 @@
 "use client"
 
-import { useState } from "react"
-import { Message as MessageType, ChatSession } from "@/lib/types"
+import { ChatSession } from "@/lib/types"
 import { MessageList } from "./MessageList"
 import { MessageInput } from "./MessageInput"
 import { ThinkingIndicator } from "./ThinkingIndicator"
@@ -10,6 +9,7 @@ import { Card } from "@/components/ui/card"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Separator } from "@/components/ui/separator"
 import { Plus, MessageSquare } from "lucide-react"
+import { useChatContext } from "@/contexts"
 
 interface ChatContainerProps {
   sessions: ChatSession[]
@@ -28,8 +28,8 @@ export function ChatContainer({
   onSendMessage,
   isThinking = false,
 }: ChatContainerProps) {
+  const { messages } = useChatContext()
   const currentSession = sessions.find((s) => s.id === currentSessionId)
-  const messages = currentSession?.messages || []
 
   return (
     <div className="flex h-[calc(100vh-12rem)] gap-4">

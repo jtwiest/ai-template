@@ -57,11 +57,21 @@ This is an AI MVP template project for building AI-powered applications with thr
 - Include co-authorship footer for Claude contributions
 - Stage relevant files only
 
+### Development Server
+**IMPORTANT**: Do NOT automatically start the dev server unless explicitly requested.
+- Assume the user is managing the dev server themselves
+- If testing is needed, first check if a server is already running:
+  ```bash
+  lsof -ti:3000  # Check if port 3000 is in use
+  ```
+- If the user reports issues and a server is running, suggest they restart it
+- Only start the dev server if the user specifically asks you to run it
+
 ### Testing & Validation
 - Test UI components with mock data before backend integration
 - Verify responsive design works on mobile
 - Check TypeScript compilation with `npm run build`
-- Ensure dev server runs without errors
+- User will handle dev server restarts for testing changes
 
 ### AI SDK Integration (Phase 3+)
 - Use Vercel AI SDK for streaming responses
@@ -84,25 +94,31 @@ This is an AI MVP template project for building AI-powered applications with thr
 ## Common Commands
 
 ```bash
-# Development
+# Development (User-Managed)
 npm run dev              # Start dev server (requires Node 20+)
 nvm use                  # Switch to Node 20 (if using nvm)
+lsof -ti:3000            # Check if dev server is running
 
 # Building
-npm run build            # Production build
+npm run build            # Production build and type checking
 npm run start            # Start production server
 
 # Code Quality
 npm run lint             # Run ESLint
+
+# Troubleshooting
+# If dev server won't start, check for existing process:
+lsof -ti:3000 | xargs kill  # Kill process on port 3000
 ```
 
 ## Quick Reference
 
 - **Plan Document**: `docs/PLAN.md` - Always check this first
 - **Types**: `src/lib/types.ts` - All TypeScript interfaces
-- **Current Phase**: Phase 1 Complete ✅ - Moving to Phase 2
-- **Dev Server**: http://localhost:3000
+- **Current Phase**: Phase 2 Complete ✅ - Moving to Phase 3
+- **Dev Server**: http://localhost:3000 (user-managed)
 - **Node Version**: 20.20.0
+- **Data Storage**: `data/` directory (JSON files, gitignored)
 
 ## Phase Checklist
 
