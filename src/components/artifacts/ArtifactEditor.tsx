@@ -1,7 +1,9 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Artifact } from "@/lib/types"
+import ReactMarkdown from "react-markdown"
+import remarkGfm from "remark-gfm"
 import {
   Dialog,
   DialogContent,
@@ -27,6 +29,13 @@ export function ArtifactEditor({ artifact, open, onClose, onSave }: ArtifactEdit
   const [title, setTitle] = useState(artifact?.title || "")
   const [content, setContent] = useState(artifact?.content || "")
   const [tags, setTags] = useState(artifact?.tags.join(", ") || "")
+
+  // Update state when artifact prop changes
+  useEffect(() => {
+    setTitle(artifact?.title || "")
+    setContent(artifact?.content || "")
+    setTags(artifact?.tags.join(", ") || "")
+  }, [artifact])
 
   const handleSave = () => {
     onSave({
@@ -96,7 +105,11 @@ export function ArtifactEditor({ artifact, open, onClose, onSave }: ArtifactEdit
             <TabsContent value="preview" className="space-y-2">
               <Label>Preview</Label>
               <div className="border rounded-md p-4 min-h-[300px] prose prose-sm dark:prose-invert max-w-none overflow-auto">
-                {content || <span className="text-muted-foreground">Nothing to preview</span>}
+                {content ? (
+                  <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
+                ) : (
+                  <span className="text-muted-foreground">Nothing to preview</span>
+                )}
               </div>
             </TabsContent>
           </Tabs>

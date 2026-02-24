@@ -9,6 +9,8 @@ import {
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Edit } from "lucide-react"
+import ReactMarkdown from "react-markdown"
+import remarkGfm from "remark-gfm"
 
 interface ArtifactViewerProps {
   artifact: Artifact | null
@@ -49,7 +51,11 @@ export function ArtifactViewer({ artifact, open, onClose, onEdit }: ArtifactView
         </DialogHeader>
 
         <div className="prose prose-sm dark:prose-invert max-w-none overflow-auto py-4">
-          {artifact.content || <span className="text-muted-foreground">No content</span>}
+          {artifact.content ? (
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>{artifact.content}</ReactMarkdown>
+          ) : (
+            <span className="text-muted-foreground">No content</span>
+          )}
         </div>
       </DialogContent>
     </Dialog>

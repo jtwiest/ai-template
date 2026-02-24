@@ -44,11 +44,8 @@ export function ArtifactCard({ artifact, onEdit, onDelete, onClick }: ArtifactCa
         </div>
       </CardHeader>
       <CardContent>
-        <p className="text-sm text-muted-foreground line-clamp-3">
-          {artifact.content || "No content"}
-        </p>
         {artifact.tags.length > 0 && (
-          <div className="flex gap-2 mt-4 flex-wrap">
+          <div className="flex gap-2 flex-wrap">
             {artifact.tags.map((tag) => (
               <Badge key={tag} variant="secondary">
                 {tag}
