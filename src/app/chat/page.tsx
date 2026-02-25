@@ -11,6 +11,8 @@ export default function ChatPage() {
     createSession,
     setCurrentSession,
     sendMessage,
+    deleteSession,
+    updateSessionTitle,
   } = useChatContext()
 
   const handleCreateSession = async () => {
@@ -39,6 +41,22 @@ export default function ChatPage() {
     }
   }
 
+  const handleDeleteSession = async (sessionId: string) => {
+    try {
+      await deleteSession(sessionId)
+    } catch (error) {
+      console.error("Failed to delete session:", error)
+    }
+  }
+
+  const handleRenameSession = async (sessionId: string, newTitle: string) => {
+    try {
+      await updateSessionTitle(sessionId, newTitle)
+    } catch (error) {
+      console.error("Failed to rename session:", error)
+    }
+  }
+
   return (
     <div>
       <h1 className="text-3xl font-bold mb-6">Chat</h1>
@@ -48,6 +66,8 @@ export default function ChatPage() {
         onCreateSession={handleCreateSession}
         onSelectSession={handleSelectSession}
         onSendMessage={handleSendMessage}
+        onDeleteSession={handleDeleteSession}
+        onRenameSession={handleRenameSession}
         isThinking={streaming}
       />
     </div>
