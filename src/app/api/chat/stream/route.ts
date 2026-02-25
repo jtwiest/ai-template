@@ -295,12 +295,6 @@ export async function POST(request: Request) {
     (async () => {
       try {
         let currentMessages = [...anthropicMessages];
-        let conversationText = '';
-        const allToolCalls: Array<{
-          name: string;
-          args: Record<string, unknown>;
-          result?: unknown;
-        }> = [];
 
         // Agentic loop - continue until we get a text response without tool use
         let continueLoop = true;
@@ -361,7 +355,14 @@ export async function POST(request: Request) {
             }
           }
 
-          conversationText += currentText;
+          // Save the text message if we got any text
+          if (currentText) {
+            console.log('Saving text message:', currentText);
+            await chatStorage.addMessage(sessionId, {
+              role: 'assistant',
+              content: currentText,
+            });
+          }
 
           // If we have tool uses, execute them and continue the loop
           if (currentToolUses.length > 0) {
@@ -402,6 +403,11 @@ export async function POST(request: Request) {
 
             // Execute tools and build tool result message
             const toolResults: Anthropic.ToolResultBlockParam[] = [];
+            const toolCallsForStorage: Array<{
+              name: string;
+              args: Record<string, unknown>;
+              result?: unknown;
+            }> = [];
 
             for (const toolUse of currentToolUses) {
               try {
@@ -420,8 +426,8 @@ export async function POST(request: Request) {
                   content: JSON.stringify(result),
                 });
 
-                // Track for saving later
-                allToolCalls.push({
+                // Track for saving
+                toolCallsForStorage.push({
                   name: toolUse.name,
                   args: toolUse.input,
                   result: {
@@ -440,6 +446,16 @@ export async function POST(request: Request) {
               }
             }
 
+            // Save tool call message
+            console.log('Saving tool call message with', toolCallsForStorage.length, 'tools');
+            await chatStorage.addMessage(sessionId, {
+              role: 'assistant',
+              content: '', // No text content for tool-only messages
+              metadata: {
+                toolCalls: toolCallsForStorage,
+              },
+            });
+
             // Add tool results as user message
             currentMessages.push({
               role: 'user',
@@ -452,31 +468,6 @@ export async function POST(request: Request) {
             continueLoop = false;
           }
         }
-
-        // Save the final assistant message
-        const assistantMessage: {
-          role: 'assistant';
-          content: string;
-          metadata?: {
-            toolCalls?: Array<{
-              name: string;
-              args: Record<string, unknown>;
-              result?: unknown;
-            }>;
-          };
-        } = {
-          role: 'assistant',
-          content: conversationText,
-        };
-
-        if (allToolCalls.length > 0) {
-          assistantMessage.metadata = {
-            toolCalls: allToolCalls,
-          };
-        }
-
-        console.log('Saving final message:', JSON.stringify(assistantMessage, null, 2));
-        await chatStorage.addMessage(sessionId, assistantMessage);
 
         // Update session timestamp
         const session = await chatStorage.getSession(sessionId);

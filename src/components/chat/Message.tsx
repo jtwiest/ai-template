@@ -1,6 +1,8 @@
 "use client"
 
 import { useState } from "react"
+import ReactMarkdown from "react-markdown"
+import remarkGfm from "remark-gfm"
 import { Message as MessageType } from "@/lib/types"
 import { cn, segmentTextWithArtifacts } from "@/lib/utils"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
@@ -56,7 +58,11 @@ export function Message({ message }: MessageProps) {
                     />
                   )
                 }
-                return <span key={index}>{segment.content}</span>
+                return (
+                  <ReactMarkdown key={index} remarkPlugins={[remarkGfm]}>
+                    {segment.content}
+                  </ReactMarkdown>
+                )
               })}
             </div>
           </div>
