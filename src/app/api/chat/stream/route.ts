@@ -151,7 +151,7 @@ async function executeTool(toolName: string, toolInput: Record<string, unknown>)
       return {
         id: artifact.id,
         title: artifact.title,
-        message: `Created artifact "${title}" with ID: ${artifact.id}`,
+        message: `Created artifact "${artifact.title}" with ID: ${artifact.id}`,
       };
     }
 
@@ -299,7 +299,7 @@ export async function POST(request: Request) {
         // Agentic loop - continue until we get a text response without tool use
         let continueLoop = true;
         let iterationCount = 0;
-        const maxIterations = 5;
+        const maxIterations = 2;
 
         while (continueLoop && iterationCount < maxIterations) {
           iterationCount++;
@@ -315,7 +315,7 @@ export async function POST(request: Request) {
           });
 
           let currentText = '';
-          let currentToolUses: Array<{ id: string; name: string; input: Record<string, unknown> }> = [];
+          let currentToolUses: Array<{ id: string; name: string; input: Record<string, unknown>; partialInput: string }> = [];
 
           // Process the stream
           for await (const event of response) {
@@ -328,6 +328,7 @@ export async function POST(request: Request) {
                   id: event.content_block.id,
                   name: event.content_block.name,
                   input: {},
+                  partialInput: '',
                 });
               }
             } else if (event.type === 'content_block_delta') {
@@ -336,16 +337,26 @@ export async function POST(request: Request) {
                 currentText += event.delta.text;
                 await writer.write(encoder.encode(`data: ${JSON.stringify({ type: 'text', content: event.delta.text })}\n\n`));
               } else if (event.delta.type === 'input_json_delta') {
-                // Accumulate tool input
+                // Accumulate tool input as string
                 const lastTool = currentToolUses[currentToolUses.length - 1];
                 if (lastTool) {
-                  const inputStr = JSON.stringify(lastTool.input);
-                  const newInputStr = inputStr.slice(0, -1) + event.delta.partial_json + '}';
+                  lastTool.partialInput += event.delta.partial_json;
+                  // Try to parse the accumulated JSON
                   try {
-                    lastTool.input = JSON.parse(newInputStr);
+                    lastTool.input = JSON.parse(lastTool.partialInput);
                   } catch {
                     // Partial JSON, will be complete later
                   }
+                }
+              }
+            } else if (event.type === 'content_block_stop') {
+              // Content block finished - ensure we have the final input parsed
+              const lastTool = currentToolUses[currentToolUses.length - 1];
+              if (lastTool && lastTool.partialInput) {
+                try {
+                  lastTool.input = JSON.parse(lastTool.partialInput);
+                } catch (error) {
+                  console.error('Failed to parse final tool input:', error);
                 }
               }
             } else if (event.type === 'message_delta') {
