@@ -6,22 +6,13 @@ export interface Message {
   role: MessageRole
   content: string
   timestamp: Date
-  thinking?: ThinkingStep[]
-  toolCalls?: ToolCall[]
-}
-
-export interface ThinkingStep {
-  id: string
-  content: string
-  timestamp: Date
-}
-
-export interface ToolCall {
-  id: string
-  name: string
-  arguments: Record<string, unknown>
-  result?: unknown
-  timestamp: Date
+  metadata?: {
+    toolCalls?: Array<{
+      name: string
+      args: Record<string, unknown>
+      result?: unknown
+    }>
+  }
 }
 
 export interface ChatSession {

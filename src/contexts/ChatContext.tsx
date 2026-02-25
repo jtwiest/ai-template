@@ -189,9 +189,14 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
         throw new Error('No response stream available');
       }
 
-      let accumulatedContent = '';
-      const assistantMessageId = `temp-assistant-${Date.now()}`;
-      let assistantMessageAdded = false;
+      // Track current assistant message being built
+      let currentMessageId: string | null = null;
+      let currentContent = '';
+      let currentToolCalls: Array<{
+        name: string
+        args: Record<string, unknown>
+        result?: unknown
+      }> = [];
 
       while (true) {
         const { done, value } = await reader.read();
@@ -201,42 +206,107 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
         const lines = chunk.split('\n');
 
         for (const line of lines) {
-          if (!line.trim()) continue; // Skip empty lines
+          if (!line.trim() || !line.startsWith('data: ')) continue;
 
-          console.log('Stream line:', line); // Debug logging
+          try {
+            const jsonStr = line.substring(6); // Remove 'data: ' prefix
+            const event = JSON.parse(jsonStr);
 
-          if (line.startsWith('0:')) {
-            // Text delta from AI SDK
-            try {
-              const jsonStr = line.substring(2);
-              const parsed = JSON.parse(jsonStr);
-              if (parsed && typeof parsed === 'string') {
-                accumulatedContent += parsed;
+            console.log('Stream event:', event);
 
-                // Add assistant message on first content received
-                if (!assistantMessageAdded) {
-                  const optimisticAssistantMessage: Message = {
-                    id: assistantMessageId,
-                    role: 'assistant',
-                    content: accumulatedContent,
-                    timestamp: new Date(),
-                  };
-                  setMessages(prev => [...prev, optimisticAssistantMessage]);
-                  assistantMessageAdded = true;
-                } else {
-                  // Update the assistant message with accumulated content
-                  setMessages(prev =>
-                    prev.map(msg =>
-                      msg.id === assistantMessageId
-                        ? { ...msg, content: accumulatedContent }
-                        : msg
-                    )
-                  );
-                }
+            if (event.type === 'text') {
+              // Text content from Anthropic SDK
+              currentContent += event.content;
+
+              // If we have a current message, update it
+              if (currentMessageId) {
+                setMessages(prev =>
+                  prev.map(msg =>
+                    msg.id === currentMessageId
+                      ? {
+                          ...msg,
+                          content: currentContent,
+                        }
+                      : msg
+                  )
+                );
+              } else {
+                // Create new message for this text
+                currentMessageId = `temp-assistant-${Date.now()}-${Math.random()}`;
+                const newMessage: Message = {
+                  id: currentMessageId,
+                  role: 'assistant',
+                  content: currentContent,
+                  timestamp: new Date(),
+                };
+                setMessages(prev => [...prev, newMessage]);
               }
-            } catch (e) {
-              // Skip malformed JSON
+            } else if (event.type === 'tool_call') {
+              // Tool call event - finalize current text message and start tool section
+              console.log('Tool call:', event.name, event.args);
+
+              // If we had text content, finalize that message
+              if (currentMessageId && currentContent) {
+                currentMessageId = null;
+                currentContent = '';
+              }
+
+              const toolCall = {
+                name: event.name,
+                args: event.args || {},
+                result: undefined,
+              };
+              currentToolCalls.push(toolCall);
+
+              // Create a new message to show the tool call
+              const toolMessageId = `temp-tool-${Date.now()}-${Math.random()}`;
+              const toolMessage: Message = {
+                id: toolMessageId,
+                role: 'assistant',
+                content: '', // No text content for tool-only messages
+                timestamp: new Date(),
+                metadata: { toolCalls: [toolCall] },
+              };
+              setMessages(prev => [...prev, toolMessage]);
+
+              // Reset for next text response
+              currentMessageId = null;
+              currentContent = '';
+            } else if (event.type === 'tool_result') {
+              // Tool result event - update the tool call message
+              console.log('Tool result:', event.name, event.result);
+
+              // Find the tool call message and update it with the result
+              setMessages(prev =>
+                prev.map(msg => {
+                  if (msg.metadata?.toolCalls) {
+                    const toolCallIndex = msg.metadata.toolCalls.findIndex(
+                      tc => tc.name === event.name && !tc.result
+                    );
+                    if (toolCallIndex >= 0) {
+                      const updatedToolCalls = [...msg.metadata.toolCalls];
+                      updatedToolCalls[toolCallIndex] = {
+                        ...updatedToolCalls[toolCallIndex],
+                        result: event.result,
+                      };
+                      return {
+                        ...msg,
+                        metadata: { toolCalls: updatedToolCalls },
+                      };
+                    }
+                  }
+                  return msg;
+                })
+              );
+            } else if (event.type === 'done') {
+              // Stream complete
+              console.log('Stream complete');
+            } else if (event.type === 'error') {
+              // Error occurred
+              throw new Error(event.error || 'Unknown streaming error');
             }
+          } catch (e) {
+            console.error('Error parsing stream event:', e);
           }
         }
       }

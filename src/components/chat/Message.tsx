@@ -5,7 +5,7 @@ import { Message as MessageType } from "@/lib/types"
 import { cn, segmentTextWithArtifacts } from "@/lib/utils"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
-import { Copy, ChevronDown, ChevronUp, Lightbulb, Wrench } from "lucide-react"
+import { Copy, ChevronDown, ChevronUp, Wrench } from "lucide-react"
 import { ArtifactLink } from "./ArtifactLink"
 
 interface MessageProps {
@@ -14,8 +14,7 @@ interface MessageProps {
 
 export function Message({ message }: MessageProps) {
   const isUser = message.role === "user"
-  const [showThinking, setShowThinking] = useState(false)
-  const [showTools, setShowTools] = useState(false)
+  const [showTools, setShowTools] = useState(true)
 
   const handleCopy = () => {
     navigator.clipboard.writeText(message.content)
@@ -23,6 +22,9 @@ export function Message({ message }: MessageProps) {
 
   // Parse message content for artifact references
   const contentSegments = segmentTextWithArtifacts(message.content)
+
+  // Get tool calls from metadata
+  const toolCalls = message.metadata?.toolCalls || []
 
   return (
     <div
@@ -68,33 +70,7 @@ export function Message({ message }: MessageProps) {
           </Button>
         </div>
 
-        {message.thinking && message.thinking.length > 0 && (
-          <div className="mt-2">
-            <Button
-              variant="ghost"
-              size="sm"
-              className="h-6 px-2 text-xs text-muted-foreground"
-              onClick={() => setShowThinking(!showThinking)}
-            >
-              <Lightbulb className="h-3 w-3 mr-1" />
-              Thinking ({message.thinking.length})
-              {showThinking ? (
-                <ChevronUp className="h-3 w-3 ml-1" />
-              ) : (
-                <ChevronDown className="h-3 w-3 ml-1" />
-              )}
-            </Button>
-            {showThinking && (
-              <div className="text-xs text-muted-foreground border-l-2 border-primary/30 pl-3 mt-2 space-y-1">
-                {message.thinking.map((step) => (
-                  <p key={step.id} className="py-1">{step.content}</p>
-                ))}
-              </div>
-            )}
-          </div>
-        )}
-
-        {message.toolCalls && message.toolCalls.length > 0 && (
+        {toolCalls.length > 0 && (
           <div className="mt-2">
             <Button
               variant="ghost"
@@ -103,7 +79,7 @@ export function Message({ message }: MessageProps) {
               onClick={() => setShowTools(!showTools)}
             >
               <Wrench className="h-3 w-3 mr-1" />
-              Tools ({message.toolCalls.length})
+              Tools ({toolCalls.length})
               {showTools ? (
                 <ChevronUp className="h-3 w-3 ml-1" />
               ) : (
@@ -111,18 +87,38 @@ export function Message({ message }: MessageProps) {
               )}
             </Button>
             {showTools && (
-              <div className="text-xs border-l-2 border-blue-500/30 pl-3 mt-2 space-y-2">
-                {message.toolCalls.map((tool) => (
-                  <div key={tool.id} className="space-y-1">
-                    <p className="font-medium text-foreground">{tool.name}</p>
-                    <pre className="text-muted-foreground bg-muted/50 p-2 rounded text-xs overflow-x-auto">
-                      {JSON.stringify(tool.arguments, null, 2)}
-                    </pre>
-                    {tool.result !== undefined && (
-                      <pre className="text-muted-foreground bg-muted/30 p-2 rounded text-xs overflow-x-auto">
-                        {JSON.stringify(tool.result, null, 2)}
-                      </pre>
+              <div className="text-xs border-l-2 border-blue-500/30 pl-3 mt-2 space-y-3">
+                {toolCalls.map((tool, index) => (
+                  <div key={index} className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <Wrench className="h-3 w-3 text-blue-500" />
+                      <p className="font-medium text-foreground">{tool.name}</p>
+                    </div>
+
+                    {tool.args && Object.keys(tool.args).length > 0 && (
+                      <div>
+                        <p className="text-muted-foreground mb-1 font-medium">Input:</p>
+                        <pre className="text-muted-foreground bg-muted/50 p-2 rounded text-xs overflow-x-auto">
+                          {JSON.stringify(tool.args, null, 2)}
+                        </pre>
+                      </div>
                     )}
+
+                    {tool.result ? (
+                      <div>
+                        <p className="text-muted-foreground mb-1 font-medium">Output:</p>
+                        <pre className="text-muted-foreground bg-green-500/10 p-2 rounded text-xs overflow-x-auto border border-green-500/20">
+                          {JSON.stringify(
+                            // Extract the actual output from the nested structure
+                            typeof tool.result === 'object' && tool.result !== null && 'result' in tool.result
+                              ? (tool.result as any).result
+                              : tool.result,
+                            null,
+                            2
+                          )}
+                        </pre>
+                      </div>
+                    ) : null}
                   </div>
                 ))}
               </div>
