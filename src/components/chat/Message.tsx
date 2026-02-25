@@ -28,6 +28,69 @@ export function Message({ message }: MessageProps) {
   // Get tool calls from metadata
   const toolCalls = message.metadata?.toolCalls || []
 
+  // If this is an assistant message with only tool calls and no content, show tools only
+  const hasContent = message.content.trim().length > 0
+  const showToolsOnly = !isUser && toolCalls.length > 0 && !hasContent
+
+  if (showToolsOnly) {
+    return (
+      <div className="px-4 space-y-3">
+        {toolCalls.map((tool, index) => {
+          const [isExpanded, setIsExpanded] = useState(true)
+
+          return (
+            <div key={index} className="border border-border/50 rounded-lg overflow-hidden">
+              <Button
+                variant="ghost"
+                className="w-full h-auto py-3 px-4 justify-start hover:bg-muted/50 rounded-none"
+                onClick={() => setIsExpanded(!isExpanded)}
+              >
+                <Wrench className="h-4 w-4 mr-2 text-blue-500 flex-shrink-0" />
+                <span className="font-semibold text-sm text-foreground">{tool.name}</span>
+                <div className="ml-auto flex-shrink-0">
+                  {isExpanded ? (
+                    <ChevronUp className="h-4 w-4 text-muted-foreground" />
+                  ) : (
+                    <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                  )}
+                </div>
+              </Button>
+
+              {isExpanded && (
+                <div className="px-4 pb-4 space-y-3 text-xs border-t border-border/50 pt-3">
+                  {tool.args && Object.keys(tool.args).length > 0 && (
+                    <div>
+                      <p className="text-muted-foreground mb-1.5 font-medium">Input:</p>
+                      <pre className="text-muted-foreground bg-muted/50 p-2 rounded text-xs overflow-x-auto">
+                        {JSON.stringify(tool.args, null, 2)}
+                      </pre>
+                    </div>
+                  )}
+
+                  {tool.result ? (
+                    <div>
+                      <p className="text-muted-foreground mb-1.5 font-medium">Output:</p>
+                      <pre className="text-muted-foreground bg-green-500/10 p-2 rounded text-xs overflow-x-auto border border-green-500/20">
+                        {JSON.stringify(
+                          // Extract the actual output from the nested structure
+                          typeof tool.result === 'object' && tool.result !== null && 'result' in tool.result
+                            ? (tool.result as any).result
+                            : tool.result,
+                          null,
+                          2
+                        )}
+                      </pre>
+                    </div>
+                  ) : null}
+                </div>
+              )}
+            </div>
+          )
+        })}
+      </div>
+    )
+  }
+
   return (
     <div
       className={cn(
