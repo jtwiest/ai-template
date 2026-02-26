@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Workflow } from "@/lib/types"
 import {
   Dialog,
@@ -21,8 +21,41 @@ interface WorkflowRunnerProps {
   onRun: (workflowId: string, parameters: Record<string, unknown>) => void
 }
 
+// Default parameters for each workflow type
+const getDefaultParameters = (workflowId: string): string => {
+  switch (workflowId) {
+    case 'data-processing':
+      return JSON.stringify({
+        inputData: "Hello World",
+        operation: "uppercase"
+      }, null, 2)
+    case 'report-generation':
+      return JSON.stringify({
+        title: "Sample Report",
+        dataSource: "api.example.com",
+        query: "SELECT * FROM users",
+        format: "markdown"
+      }, null, 2)
+    case 'long-running-processing':
+      return JSON.stringify({
+        dataSize: 1000,
+        chunkSize: 100,
+        generateReport: true
+      }, null, 2)
+    default:
+      return "{}"
+  }
+}
+
 export function WorkflowRunner({ workflow, open, onClose, onRun }: WorkflowRunnerProps) {
   const [parameters, setParameters] = useState("{}")
+
+  // Update parameters when workflow changes
+  useEffect(() => {
+    if (workflow) {
+      setParameters(getDefaultParameters(workflow.id))
+    }
+  }, [workflow])
 
   const handleRun = () => {
     try {
@@ -30,7 +63,6 @@ export function WorkflowRunner({ workflow, open, onClose, onRun }: WorkflowRunne
       if (workflow) {
         onRun(workflow.id, params)
       }
-      setParameters("{}")
       onClose()
     } catch (error) {
       alert("Invalid JSON parameters")

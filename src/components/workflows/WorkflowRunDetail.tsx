@@ -52,7 +52,7 @@ export function WorkflowRunDetail({ run, open, onClose }: WorkflowRunDetailProps
         <div className="space-y-4 py-4">
           <div>
             <h3 className="font-semibold mb-2">Workflow ID</h3>
-            <p className="text-sm font-mono bg-muted p-2 rounded">
+            <p className="text-sm font-mono bg-muted p-2 rounded break-all">
               {run.workflowId}
             </p>
           </div>
@@ -87,7 +87,7 @@ export function WorkflowRunDetail({ run, open, onClose }: WorkflowRunDetailProps
 
           <div>
             <h3 className="font-semibold mb-2">Parameters</h3>
-            <pre className="text-xs bg-muted p-3 rounded overflow-auto max-h-32">
+            <pre className="text-xs bg-muted p-3 rounded overflow-x-auto overflow-y-auto max-h-32 whitespace-pre-wrap break-words">
               {JSON.stringify(run.parameters, null, 2)}
             </pre>
           </div>
@@ -97,7 +97,7 @@ export function WorkflowRunDetail({ run, open, onClose }: WorkflowRunDetailProps
               <Separator />
               <div>
                 <h3 className="font-semibold mb-2">Result</h3>
-                <pre className="text-xs bg-muted p-3 rounded overflow-auto max-h-48">
+                <pre className="text-xs bg-muted p-3 rounded overflow-x-auto overflow-y-auto max-h-48 whitespace-pre-wrap break-words">
                   {JSON.stringify(run.result, null, 2)}
                 </pre>
               </div>
@@ -109,7 +109,7 @@ export function WorkflowRunDetail({ run, open, onClose }: WorkflowRunDetailProps
               <Separator />
               <div>
                 <h3 className="font-semibold mb-2 text-destructive">Error</h3>
-                <p className="text-sm text-destructive bg-destructive/10 p-3 rounded">
+                <p className="text-sm text-destructive bg-destructive/10 p-3 rounded break-words">
                   {run.error}
                 </p>
               </div>

@@ -250,19 +250,19 @@ export class FileSystemWorkflowStorage implements WorkflowStorage {
   private getDefaultWorkflows(): Workflow[] {
     return [
       {
-        id: 'data-processor',
-        name: 'Data Processor',
-        description: 'Process and transform data files',
+        id: 'data-processing',
+        name: 'Data Processing',
+        description: 'Process text data with operations like uppercase, lowercase, reverse, or word count',
       },
       {
-        id: 'report-generator',
-        name: 'Report Generator',
-        description: 'Generate reports from data sources',
+        id: 'report-generation',
+        name: 'Report Generation',
+        description: 'Fetch data from a source and generate a formatted report in markdown or JSON',
       },
       {
-        id: 'batch-processor',
-        name: 'Batch Processor',
-        description: 'Process multiple items in batch',
+        id: 'long-running-processing',
+        name: 'Long Running Processing',
+        description: 'Process large datasets in chunks with optional report generation',
       },
     ];
   }

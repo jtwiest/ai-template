@@ -1,5 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { workflowStorage } from '@/lib/storage';
+import { getTemporalClient, TASK_QUEUE } from '@/temporal/client';
+import {
+  dataProcessingWorkflow,
+  reportGenerationWorkflow,
+  longRunningWorkflow,
+} from '@/temporal/workflows';
 
 // POST /api/workflows/[id]/run - Start a workflow run
 export async function POST(
@@ -24,29 +30,59 @@ export async function POST(
       parameters,
     });
 
-    // TODO: In Phase 5, this will trigger the actual Temporal workflow
-    // For now, we'll simulate async execution by updating status after a delay
-    setTimeout(async () => {
+    // Start the Temporal workflow asynchronously
+    (async () => {
       try {
+        const client = await getTemporalClient();
+
+        // Update to running status
         await workflowStorage.updateRun(run.id, {
           status: 'running',
         });
 
-        // Simulate completion after 2 seconds
-        setTimeout(async () => {
-          await workflowStorage.updateRun(run.id, {
-            status: 'completed',
-            completedAt: new Date(),
-            result: {
-              message: 'Workflow completed successfully (simulated)',
-              parameters,
-            },
-          });
-        }, 2000);
+        // Select the appropriate workflow function based on workflowId
+        let workflowFunction;
+        switch (workflowId) {
+          case 'data-processing':
+            workflowFunction = dataProcessingWorkflow;
+            break;
+          case 'report-generation':
+            workflowFunction = reportGenerationWorkflow;
+            break;
+          case 'long-running-processing':
+            workflowFunction = longRunningWorkflow;
+            break;
+          default:
+            throw new Error(`Unknown workflow: ${workflowId}`);
+        }
+
+        // Start the workflow
+        const handle = await client.workflow.start(workflowFunction, {
+          taskQueue: TASK_QUEUE,
+          workflowId: `${workflowId}-${run.id}`,
+          args: [parameters],
+        });
+
+        // Wait for workflow completion
+        const result = await handle.result();
+
+        // Update run with result
+        await workflowStorage.updateRun(run.id, {
+          status: 'completed',
+          completedAt: new Date(),
+          result,
+        });
       } catch (error) {
-        console.error('Failed to update run status:', error);
+        console.error('Workflow execution failed:', error);
+        await workflowStorage.updateRun(run.id, {
+          status: 'failed',
+          completedAt: new Date(),
+          result: {
+            error: error instanceof Error ? error.message : 'Unknown error',
+          },
+        });
       }
-    }, 1000);
+    })();
 
     return NextResponse.json(run, { status: 201 });
   } catch (error) {
