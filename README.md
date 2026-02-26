@@ -9,6 +9,10 @@ A production-ready Next.js template for building AI-powered applications with ch
 - **Workflow Orchestration**: Temporal-based workflow management with automatic result storage
 - **Modern Stack**: Next.js 16, React 19, TypeScript, Tailwind CSS
 
+## Video Demo
+
+[<img width="1318" height="592" alt="Screenshot 2026-02-25 at 8 36 46 PM" src="https://github.com/user-attachments/assets/e6e640fa-3dc3-42c1-beb6-8b7c937d9477" />](https://drive.google.com/file/d/1N-UObiJSMuVAccbQlQro62BxDfSCoKK7/view?usp=sharing)
+
 ## Quick Start
 
 ### Prerequisites
