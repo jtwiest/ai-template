@@ -7,6 +7,7 @@ A production-ready Next.js template for building AI-powered applications with ch
 - **Chat Interface**: Conversational AI with streaming responses powered by Claude
 - **Artifacts System**: CRUD operations for markdown documents with AI integration
 - **Workflow Orchestration**: Temporal-based workflow management with automatic result storage
+- **Modular Tool System**: Reusable AI agent tools that can be mixed and matched across routes
 - **Modern Stack**: Next.js 16, React 19, TypeScript, Tailwind CSS
 
 ## Video Demo
@@ -76,6 +77,7 @@ That's it! See the [Quick Start Guide](docs/QUICKSTART.md) for detailed usage ex
 ## Documentation
 
 - **[Quick Start Guide](docs/QUICKSTART.md)** - Get up and running in 5 minutes
+- **[Tool System](src/lib/tools/README.md)** - Modular AI agent tools documentation
 - **[Temporal Setup](docs/TEMPORAL-SETUP.md)** - Detailed Temporal CLI installation and configuration
 - **[Temporal Workflows](docs/TEMPORAL.md)** - Workflow development and usage guide
 - **[Architecture Plan](docs/PLAN.md)** - Project architecture and implementation roadmap
@@ -97,7 +99,14 @@ ai-template/
 │   │   └── ui/               # shadcn/ui components
 │   ├── lib/                   # Shared utilities
 │   │   ├── storage/          # Data persistence layer
-│   │   └── types.ts          # TypeScript types
+│   │   ├── tools/            # Modular AI agent tools
+│   │   │   ├── types.ts      # Tool type definitions
+│   │   │   ├── registry.ts   # Tool registry and executor
+│   │   │   ├── artifacts.ts  # Artifact CRUD tools
+│   │   │   ├── workflows.ts  # Workflow orchestration tools
+│   │   │   └── README.md     # Tool system documentation
+│   │   ├── types.ts          # Shared TypeScript types
+│   │   └── utils.ts          # Utility functions
 │   └── temporal/              # Temporal workflows
 │       ├── workflows/        # Workflow definitions
 │       ├── activities/       # Activity implementations
@@ -133,6 +142,35 @@ npm run start            # Start production server
 # Code Quality
 npm run lint             # Run ESLint
 ```
+
+### Modular Tool System
+
+The template includes a flexible tool system for AI agents. Tools are organized into reusable sets that can be mixed and matched:
+
+```typescript
+import { createToolRegistry, artifactTools, workflowTools } from '@/lib/tools';
+
+// Use all tools
+const registry = createToolRegistry([artifactTools, workflowTools]);
+
+// Use only specific tools
+const registry = createToolRegistry([artifactTools]);
+
+// Get tool definitions for LLM
+const tools = registry.getDefinitions();
+
+// Execute tools
+const result = await registry.execute('createArtifact', {
+  title: 'My Document',
+  content: 'Content here'
+});
+```
+
+**Available Tool Sets:**
+- `artifactTools` - CRUD operations for markdown artifacts
+- `workflowTools` - Temporal workflow orchestration
+
+See [src/lib/tools/README.md](src/lib/tools/README.md) for detailed documentation on creating custom tools.
 
 ### Storage
 
