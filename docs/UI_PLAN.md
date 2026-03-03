@@ -319,32 +319,45 @@ className="flex-none p-[30px] border-t border-border"
 23. ✅ Clean up: removed `src/components/main/LayerToggle.tsx`
 24. ✅ Build `src/components/main/DashboardChat.tsx`
 25. ✅ Build `src/components/main/DashboardArtifacts.tsx`
-26. ✅ Build `src/components/main/GenerateReportButton.tsx` ⬅️ NEXT PHASE
+26. ✅ Build `src/components/main/GenerateReportButton.tsx`
+
+### Polish & UX (post-component) ✅
+27. ✅ Chat input auto-focuses on mount and after each send; re-focuses when streaming ends
+28. ✅ Artifacts reload automatically after each AI response (no refresh needed)
+29. ✅ Chat and Artifacts sections are properly scrollable (`min-h-0` chain fixed throughout)
+30. ✅ Added `src/components/main/UtcClock.tsx` — live UTC time floating over map (top-center)
+31. ✅ Added `src/components/main/PanelLayerControls.tsx` — inline accordion (created but not used in right panel; layer controls remain in FAB popover per user preference)
+32. ✅ Right panel sections styled as distinct rounded cards separated by gap
+33. ✅ Generate Briefing border/container removed — button sits bare at bottom of panel
+34. ✅ Theme: dark navy command-center palette (blues over blacks, `bg-card` ~`#1c2b40`, `bg-background` ~`#141f35`)
+35. ✅ Primary color changed from teal → electric blue (`217 90% 58%`)
+36. ✅ `--primary-foreground` set to white for correct contrast on solid blue elements
+37. ✅ Font changed from Asap Condensed → Inter (Tailwind config + layout updated)
+38. ✅ Glow/shadow effects removed from all buttons, switches, and FAB
+39. ✅ Layer controls FAB: solid blue circle, `bg-primary`, white icon, `h-12 w-12`
+40. ✅ Layer controls popover styled to match right panel (`bg-card`, `shadow-md`, matching header)
+41. ✅ Scrollbars styled to match navy theme ⬅️ NEXT PHASE
 
 ---
 
 ## Verification
 
 - ✅ `npm run build` — zero TypeScript errors
-- `http://localhost:3000/` — full-screen map on left, right panel visible
-- Map renders with valid `NEXT_PUBLIC_MAPBOX_TOKEN`
-- BasemapPicker FAB switches map style
-- LayerToggle FAB opens with empty list (stub)
-- `GET /api/map` returns sources, layers, basemaps, sections, modifiers from Aloft
-- Map renders all vector/raster sources as tile layers
-- Map renders GeoJSON sources with polled data
-- Switching basemap via controls changes the map style
-- Toggling individual layers shows/hides them on the map
-- Section master switch toggles all child layers
-- Layer toggle state persists across page reloads (localStorage)
-- Selected basemap persists across page reloads (localStorage)
+- ✅ Full-screen map on left, right panel on right (not overlapping)
+- ✅ Map renders with valid `NEXT_PUBLIC_MAPBOX_TOKEN`
+- ✅ Layer controls FAB opens accordion popover (basemap radio, section switches, layer switches)
+- ✅ Switching basemap changes map style
+- ✅ Toggling individual layers shows/hides them on the map
+- ✅ Section master switch toggles all child layers
+- ✅ Layer toggle state persists across page reloads (localStorage)
+- ✅ Selected basemap persists across page reloads (localStorage)
+- ✅ Chat panel accepts messages, streams AI responses, auto-focuses input
+- ✅ Artifact list scrollable, updates live after AI creates artifacts (no refresh needed)
+- ✅ Generate Briefing button disabled when no artifacts; modal opens with title + checklist
+- ✅ UTC clock displays live time over map
+- ✅ Existing routes `/chat`, `/artifacts`, `/workflows` still render correctly
 - Non-toggleable layers (`allow_toggle: false`) have disabled switches
-- Empty/loading states handled gracefully
-- Chat panel accepts messages and streams AI responses
-- Artifact list shows artifacts created by the AI during chat
-- Generate Report button disabled when no artifacts present
-- Generate Report button enabled once artifacts exist; modal opens with checkboxes
-- Existing routes `/chat`, `/artifacts`, `/workflows` still render correctly with their container layouts
+- Generate Report modal wired to actual report/workflow generation ⬅️ TODO
 
 ---
 
