@@ -1,14 +1,14 @@
-import { MapLayer } from "@/lib/types"
+import { MapLayerArtifact } from "@/lib/types"
 import { MapLayerCard } from "./MapLayerCard"
 import { Input } from "@/components/ui/input"
 import { Search } from "lucide-react"
 import { useState } from "react"
 
 interface MapLayerListProps {
-  mapLayers: MapLayer[]
-  onEdit: (mapLayer: MapLayer) => void
+  mapLayers: MapLayerArtifact[]
+  onEdit: (mapLayer: MapLayerArtifact) => void
   onDelete: (id: string) => void
-  onSelect: (mapLayer: MapLayer) => void
+  onSelect: (mapLayer: MapLayerArtifact) => void
 }
 
 export function MapLayerList({ mapLayers, onEdit, onDelete, onSelect }: MapLayerListProps) {

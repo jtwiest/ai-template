@@ -5,6 +5,7 @@ import { ChatProvider } from './ChatContext';
 import { ArtifactProvider } from './ArtifactContext';
 import { WorkflowProvider } from './WorkflowContext';
 import { MapLayerProvider } from './MapLayerContext';
+import { MapProvider } from './MapContext';
 
 // Combined provider component
 export function AppProviders({ children }: { children: React.ReactNode }) {
@@ -13,7 +14,9 @@ export function AppProviders({ children }: { children: React.ReactNode }) {
       <ArtifactProvider>
         <WorkflowProvider>
           <MapLayerProvider>
-            {children}
+            <MapProvider>
+                {children}
+            </MapProvider>
           </MapLayerProvider>
         </WorkflowProvider>
       </ArtifactProvider>
@@ -25,4 +28,3 @@ export function AppProviders({ children }: { children: React.ReactNode }) {
 export { ChatProvider, useChatContext } from './ChatContext';
 export { ArtifactProvider, useArtifactContext } from './ArtifactContext';
 export { WorkflowProvider, useWorkflowContext } from './WorkflowContext';
-export { MapLayerProvider, useMapLayerContext } from './MapLayerContext';

@@ -1,45 +1,32 @@
-import type { Metadata } from 'next'
-import { IBM_Plex_Sans, IBM_Plex_Mono } from 'next/font/google'
-import './globals.css'
-import { Navigation } from '@/components/layout/Navigation'
-import { AppProviders } from '@/contexts'
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import "./globals.css";
+import { AppProviders } from "@/contexts";
 
-const ibmPlexSans = IBM_Plex_Sans({
-  subsets: ['latin'],
-  weight: ['300', '400', '500', '600', '700'],
-  variable: '--font-ibm-plex-sans',
-  display: 'swap',
-})
-
-const ibmPlexMono = IBM_Plex_Mono({
-  subsets: ['latin'],
-  weight: ['400', '500', '600'],
-  variable: '--font-ibm-plex-mono',
-  display: 'swap',
-})
+const inter = Inter({
+	subsets: ["latin"],
+	variable: "--font-inter",
+	display: "swap",
+});
 
 export const metadata: Metadata = {
-  title: 'AI MVP Template',
-  description: 'A flexible template for AI-powered applications with chat, artifacts, and workflows',
-}
+	title: "AirSense AI",
+	description: "Tactical airspace intelligence platform",
+};
 
 export default function RootLayout({
-  children,
+	children,
 }: {
-  children: React.ReactNode
+	children: React.ReactNode;
 }) {
-  return (
-    <html lang="en" className="dark">
-      <body className={`${ibmPlexSans.variable} ${ibmPlexMono.variable} font-sans bg-background text-foreground`}>
-        <AppProviders>
-          <Navigation />
-          <main className="ml-16 min-h-screen">
-            <div className="container mx-auto px-8 py-8">
-              {children}
-            </div>
-          </main>
-        </AppProviders>
-      </body>
-    </html>
-  )
+	return (
+		<html lang="en" className="dark">
+			<body
+				className={`${inter.variable} font-sans bg-background text-foreground`}>
+				<AppProviders>
+					<main className="min-h-screen">{children}</main>
+				</AppProviders>
+			</body>
+		</html>
+	);
 }

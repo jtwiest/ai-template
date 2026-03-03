@@ -1,33 +1,33 @@
 "use client";
 
 import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
-import { MapLayer, MapLayerSource, GeoJSONFeatureCollection } from '@/lib/types';
+import { MapLayerArtifact, MapLayerSource, GeoJSONFeatureCollection } from '@/lib/types';
 
 interface MapLayerContextType {
-  mapLayers: MapLayer[];
-  currentMapLayer: MapLayer | null;
+  mapLayers: MapLayerArtifact[];
+  currentMapLayer: MapLayerArtifact | null;
   loading: boolean;
   error: string | null;
 
   loadMapLayers: () => Promise<void>;
-  getMapLayer: (id: string) => Promise<MapLayer | null>;
+  getMapLayer: (id: string) => Promise<MapLayerArtifact | null>;
   createMapLayer: (
     title: string,
     styles: Record<string, unknown>,
     sources: MapLayerSource[],
     featureCollection: GeoJSONFeatureCollection
-  ) => Promise<MapLayer>;
-  updateMapLayer: (id: string, updates: Partial<Omit<MapLayer, 'id' | 'createdAt'>>) => Promise<MapLayer>;
+  ) => Promise<MapLayerArtifact>;
+  updateMapLayer: (id: string, updates: Partial<Omit<MapLayerArtifact, 'id' | 'createdAt'>>) => Promise<MapLayerArtifact>;
   deleteMapLayer: (id: string) => Promise<void>;
   searchMapLayers: (query: string) => Promise<void>;
-  setCurrentMapLayer: (layer: MapLayer | null) => void;
+  setCurrentMapLayer: (layer: MapLayerArtifact | null) => void;
 }
 
 const MapLayerContext = createContext<MapLayerContextType | undefined>(undefined);
 
 export function MapLayerProvider({ children }: { children: React.ReactNode }) {
-  const [mapLayers, setMapLayers] = useState<MapLayer[]>([]);
-  const [currentMapLayer, setCurrentMapLayer] = useState<MapLayer | null>(null);
+  const [mapLayers, setMapLayers] = useState<MapLayerArtifact[]>([]);
+  const [currentMapLayer, setCurrentMapLayer] = useState<MapLayerArtifact | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -48,7 +48,7 @@ export function MapLayerProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   // Get a specific map layer
-  const getMapLayer = useCallback(async (id: string): Promise<MapLayer | null> => {
+  const getMapLayer = useCallback(async (id: string): Promise<MapLayerArtifact | null> => {
     try {
       setLoading(true);
       setError(null);
@@ -70,7 +70,7 @@ export function MapLayerProvider({ children }: { children: React.ReactNode }) {
     styles: Record<string, unknown>,
     sources: MapLayerSource[],
     featureCollection: GeoJSONFeatureCollection
-  ): Promise<MapLayer> => {
+  ): Promise<MapLayerArtifact> => {
     try {
       setLoading(true);
       setError(null);
@@ -95,8 +95,8 @@ export function MapLayerProvider({ children }: { children: React.ReactNode }) {
   // Update a map layer
   const updateMapLayer = useCallback(async (
     id: string,
-    updates: Partial<Omit<MapLayer, 'id' | 'createdAt'>>
-  ): Promise<MapLayer> => {
+    updates: Partial<Omit<MapLayerArtifact, 'id' | 'createdAt'>>
+  ): Promise<MapLayerArtifact> => {
     try {
       setLoading(true);
       setError(null);

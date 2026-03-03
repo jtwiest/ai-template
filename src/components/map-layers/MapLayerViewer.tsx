@@ -1,4 +1,4 @@
-import { MapLayer } from "@/lib/types"
+import { MapLayerArtifact } from "@/lib/types"
 import {
   Dialog,
   DialogContent,
@@ -12,7 +12,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Edit } from "lucide-react"
 
 interface MapLayerViewerProps {
-  mapLayer: MapLayer | null
+  mapLayer: MapLayerArtifact | null
   open: boolean
   onClose: () => void
   onEdit: () => void

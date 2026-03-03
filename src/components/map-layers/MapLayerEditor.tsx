@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { MapLayer, MapLayerSource, GeoJSONFeatureCollection } from "@/lib/types"
+import { MapLayerArtifact, MapLayerSource, GeoJSONFeatureCollection } from "@/lib/types"
 import {
   Dialog,
   DialogContent,
@@ -17,10 +17,10 @@ import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 interface MapLayerEditorProps {
-  mapLayer?: MapLayer
+  mapLayer?: MapLayerArtifact
   open: boolean
   onClose: () => void
-  onSave: (layerData: Partial<MapLayer>) => void
+  onSave: (layerData: Partial<MapLayerArtifact>) => void
 }
 
 const DEFAULT_FEATURE_COLLECTION: GeoJSONFeatureCollection = {

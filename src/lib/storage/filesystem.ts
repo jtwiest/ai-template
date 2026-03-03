@@ -1,7 +1,7 @@
 import fs from 'fs/promises';
 import path from 'path';
 import { ChatStorage, ArtifactStorage, WorkflowStorage, MapLayerStorage } from './interfaces';
-import { Artifact, ChatSession, Message, WorkflowRun, Workflow, MapLayer } from '../types';
+import { Artifact, ChatSession, Message, WorkflowRun, Workflow, MapLayerArtifact } from '../types';
 
 const DATA_DIR = path.join(process.cwd(), 'data');
 
@@ -272,18 +272,18 @@ export class FileSystemWorkflowStorage implements WorkflowStorage {
 export class FileSystemMapLayerStorage implements MapLayerStorage {
   private mapLayersFile = path.join(DATA_DIR, 'map-layers.json');
 
-  async getMapLayers(): Promise<MapLayer[]> {
-    return readJSONFile<MapLayer[]>(this.mapLayersFile, []);
+  async getMapLayers(): Promise<MapLayerArtifact[]> {
+    return readJSONFile<MapLayerArtifact[]>(this.mapLayersFile, []);
   }
 
-  async getMapLayer(layerId: string): Promise<MapLayer | null> {
+  async getMapLayer(layerId: string): Promise<MapLayerArtifact | null> {
     const layers = await this.getMapLayers();
     return layers.find(l => l.id === layerId) || null;
   }
 
-  async createMapLayer(layer: Omit<MapLayer, 'id' | 'createdAt' | 'updatedAt'>): Promise<MapLayer> {
+  async createMapLayer(layer: Omit<MapLayerArtifact, 'id' | 'createdAt' | 'updatedAt'>): Promise<MapLayerArtifact> {
     const layers = await this.getMapLayers();
-    const newLayer: MapLayer = {
+    const newLayer: MapLayerArtifact = {
       ...layer,
       id: `map-layer-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       createdAt: new Date(),
@@ -294,10 +294,10 @@ export class FileSystemMapLayerStorage implements MapLayerStorage {
     return newLayer;
   }
 
-  async updateMapLayer(layerId: string, updates: Partial<Omit<MapLayer, 'id' | 'createdAt'>>): Promise<MapLayer> {
+  async updateMapLayer(layerId: string, updates: Partial<Omit<MapLayerArtifact, 'id' | 'createdAt'>>): Promise<MapLayerArtifact> {
     const layers = await this.getMapLayers();
     const index = layers.findIndex(l => l.id === layerId);
-    if (index === -1) throw new Error(`MapLayer ${layerId} not found`);
+    if (index === -1) throw new Error(`MapLayerArtifact ${layerId} not found`);
 
     layers[index] = {
       ...layers[index],
@@ -316,7 +316,7 @@ export class FileSystemMapLayerStorage implements MapLayerStorage {
     await writeJSONFile(this.mapLayersFile, filtered);
   }
 
-  async searchMapLayers(query: string): Promise<MapLayer[]> {
+  async searchMapLayers(query: string): Promise<MapLayerArtifact[]> {
     const layers = await this.getMapLayers();
     const lowerQuery = query.toLowerCase();
     return layers.filter(

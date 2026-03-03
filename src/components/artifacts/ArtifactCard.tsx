@@ -17,7 +17,7 @@ export function ArtifactCard({ artifact, onEdit, onDelete, onClick }: ArtifactCa
       <CardHeader>
         <div className="flex items-start justify-between">
           <div className="flex items-start gap-3 flex-1">
-            <FileText className="h-5 w-5 mt-1 text-muted-foreground" />
+            <FileText className="h-5 w-5 mt-1 text-foreground" />
             <div className="flex-1 min-w-0">
               <CardTitle className="text-lg truncate">{artifact.title}</CardTitle>
               <CardDescription className="mt-1">

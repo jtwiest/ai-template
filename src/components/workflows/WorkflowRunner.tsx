@@ -89,7 +89,7 @@ export function WorkflowRunner({ workflow, open, onClose, onRun }: WorkflowRunne
               placeholder='{"key": "value"}'
               className="font-mono min-h-[120px]"
             />
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs text-foreground">
               Enter workflow parameters as a JSON object
             </p>
           </div>

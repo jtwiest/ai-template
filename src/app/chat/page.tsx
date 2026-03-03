@@ -58,7 +58,7 @@ export default function ChatPage() {
   }
 
   return (
-    <div>
+    <div className="container mx-auto px-8 py-8">
       <h1 className="text-3xl font-bold mb-6">Chat</h1>
       <ChatContainer
         sessions={sessions}

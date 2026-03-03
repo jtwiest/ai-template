@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { MapLayer } from "@/lib/types"
+import { MapLayerArtifact } from "@/lib/types"
 import { MapLayerList } from "@/components/map-layers/MapLayerList"
 import { MapLayerEditor } from "@/components/map-layers/MapLayerEditor"
 import { MapLayerViewer } from "@/components/map-layers/MapLayerViewer"
@@ -11,8 +11,8 @@ import { useMapLayerContext } from "@/contexts/MapLayerContext"
 
 export default function MapLayersPage() {
   const { mapLayers, createMapLayer, updateMapLayer, deleteMapLayer } = useMapLayerContext()
-  const [editingMapLayer, setEditingMapLayer] = useState<MapLayer | undefined>()
-  const [viewingMapLayer, setViewingMapLayer] = useState<MapLayer | null>(null)
+  const [editingMapLayer, setEditingMapLayer] = useState<MapLayerArtifact | undefined>()
+  const [viewingMapLayer, setViewingMapLayer] = useState<MapLayerArtifact | null>(null)
   const [isEditorOpen, setIsEditorOpen] = useState(false)
   const [isViewerOpen, setIsViewerOpen] = useState(false)
 
@@ -21,18 +21,18 @@ export default function MapLayersPage() {
     setIsEditorOpen(true)
   }
 
-  const handleEdit = (mapLayer: MapLayer) => {
+  const handleEdit = (mapLayer: MapLayerArtifact) => {
     setEditingMapLayer(mapLayer)
     setIsViewerOpen(false)
     setIsEditorOpen(true)
   }
 
-  const handleView = (mapLayer: MapLayer) => {
+  const handleView = (mapLayer: MapLayerArtifact) => {
     setViewingMapLayer(mapLayer)
     setIsViewerOpen(true)
   }
 
-  const handleSave = async (layerData: Partial<MapLayer>) => {
+  const handleSave = async (layerData: Partial<MapLayerArtifact>) => {
     if (layerData.id) {
       // Update existing
       const updated = await updateMapLayer(layerData.id, layerData)

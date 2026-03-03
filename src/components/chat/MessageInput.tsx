@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, KeyboardEvent } from "react"
+import { useState, useEffect, useRef, KeyboardEvent } from "react"
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
 import { Send } from "lucide-react"
@@ -12,11 +12,21 @@ interface MessageInputProps {
 
 export function MessageInput({ onSendMessage, disabled }: MessageInputProps) {
   const [input, setInput] = useState("")
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
+
+  // Focus on mount and whenever input becomes enabled again (e.g. AI finishes streaming)
+  useEffect(() => {
+    if (!disabled) {
+      textareaRef.current?.focus()
+    }
+  }, [disabled])
 
   const handleSend = () => {
     if (input.trim() && !disabled) {
       onSendMessage(input.trim())
       setInput("")
+      // Restore focus after clearing input
+      setTimeout(() => textareaRef.current?.focus(), 0)
     }
   }
 
@@ -31,6 +41,7 @@ export function MessageInput({ onSendMessage, disabled }: MessageInputProps) {
     <div className="border-t p-4">
       <div className="flex gap-2">
         <Textarea
+          ref={textareaRef}
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}

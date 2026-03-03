@@ -54,7 +54,7 @@ export function ArtifactViewer({ artifact, open, onClose, onEdit }: ArtifactView
           {artifact.content ? (
             <ReactMarkdown remarkPlugins={[remarkGfm]}>{artifact.content}</ReactMarkdown>
           ) : (
-            <span className="text-muted-foreground">No content</span>
+            <span className="text-foreground">No content</span>
           )}
         </div>
       </DialogContent>

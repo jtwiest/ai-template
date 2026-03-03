@@ -62,14 +62,14 @@ export function WorkflowRunDetail({ run, open, onClose }: WorkflowRunDetailProps
           <div className="grid grid-cols-2 gap-4">
             <div>
               <h3 className="font-semibold mb-2">Started At</h3>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-foreground">
                 {new Date(run.startedAt).toLocaleString()}
               </p>
             </div>
             {run.completedAt && (
               <div>
                 <h3 className="font-semibold mb-2">Completed At</h3>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-sm text-foreground">
                   {new Date(run.completedAt).toLocaleString()}
                 </p>
               </div>
@@ -79,7 +79,7 @@ export function WorkflowRunDetail({ run, open, onClose }: WorkflowRunDetailProps
           {duration !== null && (
             <div>
               <h3 className="font-semibold mb-2">Duration</h3>
-              <p className="text-sm text-muted-foreground">{duration} seconds</p>
+              <p className="text-sm text-foreground">{duration} seconds</p>
             </div>
           )}
 

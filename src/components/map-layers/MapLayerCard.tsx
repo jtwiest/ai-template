@@ -1,14 +1,14 @@
-import { MapLayer } from "@/lib/types"
+import { MapLayerArtifact } from "@/lib/types"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Map, Edit, Trash2 } from "lucide-react"
 
 interface MapLayerCardProps {
-  mapLayer: MapLayer
-  onEdit: (mapLayer: MapLayer) => void
+  mapLayer: MapLayerArtifact
+  onEdit: (mapLayer: MapLayerArtifact) => void
   onDelete: (id: string) => void
-  onClick: (mapLayer: MapLayer) => void
+  onClick: (mapLayer: MapLayerArtifact) => void
 }
 
 export function MapLayerCard({ mapLayer, onEdit, onDelete, onClick }: MapLayerCardProps) {

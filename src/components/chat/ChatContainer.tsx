@@ -108,7 +108,7 @@ export function ChatContainer({
         <ScrollArea className="flex-1">
           <div className="space-y-2">
             {sessions.length === 0 ? (
-              <p className="text-sm text-muted-foreground text-center py-4">
+              <p className="text-sm text-foreground text-center py-4">
                 No conversations yet
               </p>
             ) : (
@@ -166,7 +166,7 @@ export function ChatContainer({
           </>
         ) : (
           <>
-            <div className="flex-1 flex items-center justify-center text-muted-foreground">
+            <div className="flex-1 flex items-center justify-center text-foreground">
               <div className="text-center max-w-md px-4">
                 <MessageSquare className="h-16 w-16 mx-auto mb-6 opacity-50" />
                 <h2 className="text-2xl font-semibold mb-3 text-foreground">Welcome to AI Chat</h2>
