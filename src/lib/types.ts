@@ -33,6 +33,39 @@ export interface Artifact {
   updatedAt: Date
 }
 
+// GeoJSON types
+export interface GeoJSONFeature {
+  type: 'Feature'
+  geometry: {
+    type: string
+    coordinates: unknown
+  }
+  properties: Record<string, unknown>
+}
+
+export interface GeoJSONFeatureCollection {
+  type: 'FeatureCollection'
+  features: GeoJSONFeature[]
+}
+
+// MapLayer types
+export interface MapLayerSource {
+  id: string
+  type: string
+  url?: string
+  data?: unknown
+}
+
+export interface MapLayer {
+  id: string
+  title: string
+  styles: Record<string, unknown>
+  sources: MapLayerSource[]
+  featureCollection: GeoJSONFeatureCollection
+  createdAt: Date
+  updatedAt: Date
+}
+
 // Workflow types
 export type WorkflowStatus = "pending" | "running" | "completed" | "failed"
 

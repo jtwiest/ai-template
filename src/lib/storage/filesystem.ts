@@ -1,7 +1,7 @@
 import fs from 'fs/promises';
 import path from 'path';
-import { ChatStorage, ArtifactStorage, WorkflowStorage } from './interfaces';
-import { Artifact, ChatSession, Message, WorkflowRun, Workflow } from '../types';
+import { ChatStorage, ArtifactStorage, WorkflowStorage, MapLayerStorage } from './interfaces';
+import { Artifact, ChatSession, Message, WorkflowRun, Workflow, MapLayer } from '../types';
 
 const DATA_DIR = path.join(process.cwd(), 'data');
 
@@ -265,5 +265,65 @@ export class FileSystemWorkflowStorage implements WorkflowStorage {
         description: 'Process large datasets in chunks with optional report generation',
       },
     ];
+  }
+}
+
+// Filesystem implementation for MapLayers
+export class FileSystemMapLayerStorage implements MapLayerStorage {
+  private mapLayersFile = path.join(DATA_DIR, 'map-layers.json');
+
+  async getMapLayers(): Promise<MapLayer[]> {
+    return readJSONFile<MapLayer[]>(this.mapLayersFile, []);
+  }
+
+  async getMapLayer(layerId: string): Promise<MapLayer | null> {
+    const layers = await this.getMapLayers();
+    return layers.find(l => l.id === layerId) || null;
+  }
+
+  async createMapLayer(layer: Omit<MapLayer, 'id' | 'createdAt' | 'updatedAt'>): Promise<MapLayer> {
+    const layers = await this.getMapLayers();
+    const newLayer: MapLayer = {
+      ...layer,
+      id: `map-layer-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+    layers.push(newLayer);
+    await writeJSONFile(this.mapLayersFile, layers);
+    return newLayer;
+  }
+
+  async updateMapLayer(layerId: string, updates: Partial<Omit<MapLayer, 'id' | 'createdAt'>>): Promise<MapLayer> {
+    const layers = await this.getMapLayers();
+    const index = layers.findIndex(l => l.id === layerId);
+    if (index === -1) throw new Error(`MapLayer ${layerId} not found`);
+
+    layers[index] = {
+      ...layers[index],
+      ...updates,
+      id: layerId, // Prevent ID override
+      updatedAt: new Date(),
+    };
+
+    await writeJSONFile(this.mapLayersFile, layers);
+    return layers[index];
+  }
+
+  async deleteMapLayer(layerId: string): Promise<void> {
+    const layers = await this.getMapLayers();
+    const filtered = layers.filter(l => l.id !== layerId);
+    await writeJSONFile(this.mapLayersFile, filtered);
+  }
+
+  async searchMapLayers(query: string): Promise<MapLayer[]> {
+    const layers = await this.getMapLayers();
+    const lowerQuery = query.toLowerCase();
+    return layers.filter(
+      l =>
+        l.title.toLowerCase().includes(lowerQuery) ||
+        JSON.stringify(l.styles).toLowerCase().includes(lowerQuery) ||
+        JSON.stringify(l.featureCollection).toLowerCase().includes(lowerQuery)
+    );
   }
 }

@@ -1,4 +1,4 @@
-import { Artifact, ChatSession, Message, WorkflowRun, Workflow } from '../types';
+import { Artifact, ChatSession, Message, WorkflowRun, Workflow, MapLayer } from '../types';
 
 // Storage interface for chat operations
 export interface ChatStorage {
@@ -32,4 +32,14 @@ export interface WorkflowStorage {
   getRun(runId: string): Promise<WorkflowRun | null>;
   createRun(run: Omit<WorkflowRun, 'id' | 'startedAt'>): Promise<WorkflowRun>;
   updateRun(runId: string, updates: Partial<WorkflowRun>): Promise<WorkflowRun>;
+}
+
+// Storage interface for map layer operations
+export interface MapLayerStorage {
+  getMapLayers(): Promise<MapLayer[]>;
+  getMapLayer(layerId: string): Promise<MapLayer | null>;
+  createMapLayer(layer: Omit<MapLayer, 'id' | 'createdAt' | 'updatedAt'>): Promise<MapLayer>;
+  updateMapLayer(layerId: string, updates: Partial<Omit<MapLayer, 'id' | 'createdAt'>>): Promise<MapLayer>;
+  deleteMapLayer(layerId: string): Promise<void>;
+  searchMapLayers(query: string): Promise<MapLayer[]>;
 }

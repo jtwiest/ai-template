@@ -28,3 +28,4 @@ export * from './registry';
 export * from './artifacts';
 export * from './workflows';
 export * from './airspace';
+export * from './map-layers';

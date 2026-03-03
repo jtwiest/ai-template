@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
-import { MessageSquare, FileText, Workflow, Home } from "lucide-react"
+import { MessageSquare, FileText, Workflow, Home, Map } from "lucide-react"
 
 const navItems = [
   {
@@ -20,6 +20,11 @@ const navItems = [
     name: "Artifacts",
     href: "/artifacts",
     icon: FileText,
+  },
+  {
+    name: "Map Layers",
+    href: "/map-layers",
+    icon: Map,
   },
   {
     name: "Workflows",
