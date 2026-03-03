@@ -49,9 +49,9 @@ export function Message({ message }: MessageProps) {
                 <span className="font-semibold text-sm text-foreground">{tool.name}</span>
                 <div className="ml-auto flex-shrink-0">
                   {isExpanded ? (
-                    <ChevronUp className="h-4 w-4 text-muted-foreground" />
+                    <ChevronUp className="h-4 w-4 text-foreground" />
                   ) : (
-                    <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                    <ChevronDown className="h-4 w-4 text-foreground" />
                   )}
                 </div>
               </Button>
@@ -60,8 +60,8 @@ export function Message({ message }: MessageProps) {
                 <div className="px-4 pb-4 space-y-3 text-xs border-t border-border/50 pt-3">
                   {tool.args && Object.keys(tool.args).length > 0 && (
                     <div>
-                      <p className="text-muted-foreground mb-1.5 font-medium">Input:</p>
-                      <pre className="text-muted-foreground bg-muted/50 p-2 rounded text-xs overflow-x-auto">
+                      <p className="text-foreground mb-1.5 font-medium">Input:</p>
+                      <pre className="text-foreground bg-muted/50 p-2 rounded text-xs overflow-x-auto">
                         {JSON.stringify(tool.args, null, 2)}
                       </pre>
                     </div>
@@ -69,8 +69,8 @@ export function Message({ message }: MessageProps) {
 
                   {tool.result ? (
                     <div>
-                      <p className="text-muted-foreground mb-1.5 font-medium">Output:</p>
-                      <pre className="text-muted-foreground bg-green-500/10 p-2 rounded text-xs overflow-x-auto border border-green-500/20">
+                      <p className="text-foreground mb-1.5 font-medium">Output:</p>
+                      <pre className="text-foreground bg-green-500/10 p-2 rounded text-xs overflow-x-auto border border-green-500/20">
                         {JSON.stringify(
                           // Extract the actual output from the nested structure
                           typeof tool.result === 'object' && tool.result !== null && 'result' in tool.result
@@ -144,7 +144,7 @@ export function Message({ message }: MessageProps) {
             <Button
               variant="ghost"
               size="sm"
-              className="h-6 px-2 text-xs text-muted-foreground"
+              className="h-6 px-2 text-xs text-foreground"
               onClick={() => setShowTools(!showTools)}
             >
               <Wrench className="h-3 w-3 mr-1" />
@@ -166,8 +166,8 @@ export function Message({ message }: MessageProps) {
 
                     {tool.args && Object.keys(tool.args).length > 0 && (
                       <div>
-                        <p className="text-muted-foreground mb-1 font-medium">Input:</p>
-                        <pre className="text-muted-foreground bg-muted/50 p-2 rounded text-xs overflow-x-auto">
+                        <p className="text-foreground mb-1 font-medium">Input:</p>
+                        <pre className="text-foreground bg-muted/50 p-2 rounded text-xs overflow-x-auto">
                           {JSON.stringify(tool.args, null, 2)}
                         </pre>
                       </div>
@@ -175,8 +175,8 @@ export function Message({ message }: MessageProps) {
 
                     {tool.result ? (
                       <div>
-                        <p className="text-muted-foreground mb-1 font-medium">Output:</p>
-                        <pre className="text-muted-foreground bg-green-500/10 p-2 rounded text-xs overflow-x-auto border border-green-500/20">
+                        <p className="text-foreground mb-1 font-medium">Output:</p>
+                        <pre className="text-foreground bg-green-500/10 p-2 rounded text-xs overflow-x-auto border border-green-500/20">
                           {JSON.stringify(
                             // Extract the actual output from the nested structure
                             typeof tool.result === 'object' && tool.result !== null && 'result' in tool.result
@@ -195,7 +195,7 @@ export function Message({ message }: MessageProps) {
           </div>
         )}
 
-        <p className="text-xs text-muted-foreground mt-2">
+        <p className="text-xs text-foreground mt-2">
           {new Date(message.timestamp).toLocaleTimeString()}
         </p>
       </div>

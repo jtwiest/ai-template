@@ -20,7 +20,7 @@ export function MessageList({ messages }: MessageListProps) {
     <ScrollArea className="flex-1 px-4">
       <div className="space-y-4 py-4">
         {messages.length === 0 ? (
-          <div className="flex items-center justify-center h-full text-muted-foreground">
+          <div className="flex items-center justify-center h-full text-foreground">
             <p>Start a conversation...</p>
           </div>
         ) : (

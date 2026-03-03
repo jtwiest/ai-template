@@ -108,7 +108,7 @@ export function ArtifactEditor({ artifact, open, onClose, onSave }: ArtifactEdit
                 {content ? (
                   <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
                 ) : (
-                  <span className="text-muted-foreground">Nothing to preview</span>
+                  <span className="text-foreground">Nothing to preview</span>
                 )}
               </div>
             </TabsContent>
