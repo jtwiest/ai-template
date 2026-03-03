@@ -38,7 +38,9 @@ export function MapLayerControls() {
 	useEffect(() => {
 		if (sections.length > 0) {
 			setOpenItems(prev => {
-				const incoming = sections.map(s => s.id).filter(id => !prev.includes(id));
+				const incoming = sections
+					.map(s => s.id)
+					.filter(id => !prev.includes(id));
 				return incoming.length > 0 ? [...prev, ...incoming] : prev;
 			});
 		}
@@ -54,20 +56,19 @@ export function MapLayerControls() {
 		<Popover>
 			<PopoverTrigger asChild>
 				<Button
-					variant="ghost"
-					className="h-12 w-12 rounded-full border border-primary/50 bg-card/90 text-primary hover:bg-card/90 hover:text-primary hover:border-primary hover:shadow-[0_0_18px_rgba(0,212,255,0.35)] backdrop-blur-sm"
+					variant="default"
+					className="h-12 w-12 rounded-full bg-primary text-primary-foreground hover:bg-primary/90"
 					title="Layer controls">
-					<Layers className="h-5 w-5" />
+					<Layers className="h-6 w-6" />
 				</Button>
 			</PopoverTrigger>
 			<PopoverContent
 				side="right"
 				align="start"
-				className="w-80 p-0 border-border bg-popover rounded-md shadow-[0_0_40px_rgba(0,0,0,0.6)]">
+				className="w-80 p-0 border-border bg-card rounded-md shadow-md">
 				{/* Panel header */}
-				<div className="flex items-center gap-2 px-3 py-2.5 border-b border-border">
-					<div className="h-1 w-1 rounded-full bg-primary animate-pulse" />
-					<span className="text-xs font-medium uppercase tracking-widest text-foreground">
+				<div className="flex items-center gap-2 px-3 py-2 border-b border-border">
+					<span className="text-lg font-bold uppercase tracking-widest text-foreground">
 						Layer Controls
 					</span>
 				</div>
@@ -115,12 +116,9 @@ export function MapLayerControls() {
 													key={mod.id}
 													className="w-full flex items-center justify-between gap-3 px-1 py-1 rounded hover:bg-secondary/50 transition-colors">
 													<div className="flex-1 min-w-0">
-														<p className="text-sm text-foreground tracking-wide">{mod.title}</p>
-														{mod.description && (
-															<p className="text-xs text-foreground mt-0.5">
-																{mod.description}
-															</p>
-														)}
+														<p className="text-sm text-foreground tracking-wide">
+															{mod.title}
+														</p>
 													</div>
 													<Switch
 														checked={layerSettings[mod.id] !== false}
@@ -138,7 +136,10 @@ export function MapLayerControls() {
 							{sections.map(section => {
 								const sectionOn = isSectionOn(section.id);
 								return (
-									<AccordionItem key={section.id} value={section.id} className="border-border">
+									<AccordionItem
+										key={section.id}
+										value={section.id}
+										className="border-border">
 										<div className="flex items-center gap-2 py-0.5">
 											<Switch
 												checked={sectionOn}
@@ -163,11 +164,6 @@ export function MapLayerControls() {
 																<p className="text-sm text-foreground tracking-wide">
 																	{layer.title}
 																</p>
-																{layer.description && (
-																	<p className="text-xs text-foreground mt-0.5">
-																		{layer.description}
-																	</p>
-																)}
 															</div>
 															<Switch
 																checked={layerSettings[layer.id] !== false}

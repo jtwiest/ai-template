@@ -316,10 +316,10 @@ className="flex-none p-[30px] border-t border-border"
 20. ✅ Update `src/components/main/BasemapPicker.tsx` — context-driven, fallback to hardcoded list
 21. ✅ Update `src/components/main/MapView.tsx` — render dynamic `<Source>` and `<Layer>` from context
 22. ✅ Update `src/components/main/Main.tsx` — removed local map state, uses `MapContext`
-23. ✅ Clean up: removed `src/components/main/LayerToggle.tsx` ⬅️ NEXT PHASE
-24. Build `src/components/main/DashboardChat.tsx`
-25. Build `src/components/main/DashboardArtifacts.tsx`
-26. Build `src/components/main/GenerateReportButton.tsx`
+23. ✅ Clean up: removed `src/components/main/LayerToggle.tsx`
+24. ✅ Build `src/components/main/DashboardChat.tsx`
+25. ✅ Build `src/components/main/DashboardArtifacts.tsx`
+26. ✅ Build `src/components/main/GenerateReportButton.tsx` ⬅️ NEXT PHASE
 
 ---
 

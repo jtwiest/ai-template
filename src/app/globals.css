@@ -2,10 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ── Dark scrollbars (WebKit + Firefox) ── */
+/* ── Scrollbars ── */
 * {
   scrollbar-width: thin;
-  scrollbar-color: hsl(212 35% 22%) transparent;
+  scrollbar-color: hsl(220 30% 28%) transparent;
 }
 
 ::-webkit-scrollbar {
@@ -18,12 +18,12 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: hsl(212 35% 22%);
+  background: hsl(220 30% 28%);
   border-radius: 2px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: hsl(192 80% 35%);
+  background: hsl(217 90% 58%);
 }
 
 @layer base {
@@ -58,43 +58,43 @@
   }
 
   .dark {
-    /* ── Deep navy tactical theme ── */
-    --background: 222 47% 7%;          /* #090F1C deep navy */
-    --foreground: 0 0% 96%;            /* #F5F5F5 pure white — no color cast */
+    /* ── Dark navy command center theme ── */
+    --background: 222 42% 12%;          /* #141f35 navy */
+    --foreground: 210 25% 90%;          /* #dce6f0 blue-white */
 
-    --card: 220 42% 11%;               /* #101A29 surface — readable separation */
-    --card-foreground: 0 0% 96%;
+    --card: 220 38% 16%;                /* #1c2b40 navy panel */
+    --card-foreground: 210 25% 90%;
 
-    --popover: 218 40% 13%;            /* #131E2F elevated */
-    --popover-foreground: 0 0% 96%;
+    --popover: 220 36% 19%;             /* #212f47 elevated surface */
+    --popover-foreground: 210 25% 90%;
 
-    --primary: 192 100% 50%;           /* #00D4FF cyan — interactive */
-    --primary-foreground: 222 47% 7%;
+    --primary: 217 90% 58%;             /* #3d8ef5 electric blue */
+    --primary-foreground: 0 0% 100%;    /* white — on solid blue */
 
-    --secondary: 218 35% 17%;          /* #192536 secondary surface */
-    --secondary-foreground: 0 0% 96%;
+    --secondary: 220 33% 22%;           /* #253345 secondary surface */
+    --secondary-foreground: 210 25% 90%;
 
-    --muted: 218 35% 15%;
-    --muted-foreground: 0 0% 78%;      /* #C7C7C7 light gray — legible without color cast */
+    --muted: 220 33% 20%;               /* #222f42 */
+    --muted-foreground: 215 20% 60%;    /* #7e8fa8 blue-grey */
 
-    --accent: 145 75% 45%;             /* #1ABF70 green — healthy */
-    --accent-foreground: 222 47% 7%;
+    --accent: 199 80% 48%;              /* #16a8d4 sky blue accent */
+    --accent-foreground: 222 42% 12%;
 
-    --destructive: 0 84% 60%;          /* #EF4444 red — alert */
-    --destructive-foreground: 210 30% 94%;
+    --destructive: 0 78% 55%;
+    --destructive-foreground: 210 25% 95%;
 
-    --warning: 38 90% 52%;             /* #F5A20E amber — warning */
-    --warning-foreground: 222 47% 7%;
+    --warning: 38 88% 50%;
+    --warning-foreground: 222 42% 12%;
 
-    --border: 216 30% 22%;             /* #233144 visible thin border */
-    --input: 218 40% 13%;
-    --ring: 192 100% 50%;              /* cyan focus ring */
+    --border: 220 28% 34%;              /* #3a5070 blue-tinted border */
+    --input: 220 36% 19%;
+    --ring: 217 90% 58%;
 
-    --chart-1: 192 100% 50%;           /* cyan */
-    --chart-2: 145 75% 45%;            /* green */
-    --chart-3: 38 90% 52%;             /* amber */
-    --chart-4: 0 84% 60%;              /* red */
-    --chart-5: 270 65% 60%;            /* purple */
+    --chart-1: 217 90% 58%;            /* blue */
+    --chart-2: 199 80% 48%;            /* sky */
+    --chart-3: 38 88% 50%;             /* amber */
+    --chart-4: 0 78% 55%;              /* red */
+    --chart-5: 270 60% 60%;            /* purple */
 
     --radius: 0.375rem;
   }
@@ -105,11 +105,12 @@
   }
 
   html {
-    font-size: 18px;
+    font-size: 16px;
   }
 
   body {
     @apply bg-background text-foreground;
+    font-family: var(--font-inter), system-ui, sans-serif;
     font-feature-settings: "tnum" on, "lnum" on;
     -webkit-font-smoothing: antialiased;
   }

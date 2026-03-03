@@ -10,11 +10,11 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "border border-primary/60 bg-transparent text-primary hover:border-primary hover:bg-primary/10 hover:shadow-[0_0_14px_rgba(0,197,224,0.25)]",
+          "border border-primary/60 bg-transparent text-primary hover:border-primary hover:bg-primary/10",
         destructive:
-          "border border-destructive/60 bg-transparent text-destructive hover:border-destructive hover:bg-destructive/10 hover:shadow-[0_0_14px_rgba(239,68,68,0.25)]",
+          "border border-destructive/60 bg-transparent text-destructive hover:border-destructive hover:bg-destructive/10",
         outline:
-          "border border-border bg-transparent text-foreground hover:border-primary/60 hover:text-primary hover:shadow-[0_0_10px_rgba(0,197,224,0.15)]",
+          "border border-border bg-transparent text-foreground hover:border-primary/60 hover:text-primary",
         secondary:
           "border border-border bg-secondary text-secondary-foreground hover:bg-secondary/60 hover:border-border/80",
         ghost:
@@ -22,9 +22,9 @@ const buttonVariants = cva(
         link:
           "text-primary underline-offset-4 hover:underline",
         warning:
-          "border border-warning/60 bg-transparent text-warning hover:border-warning hover:bg-warning/10 hover:shadow-[0_0_14px_rgba(245,155,11,0.25)]",
+          "border border-warning/60 bg-transparent text-warning hover:border-warning hover:bg-warning/10",
         success:
-          "border border-accent/60 bg-transparent text-accent hover:border-accent hover:bg-accent/10 hover:shadow-[0_0_14px_rgba(24,168,99,0.25)]",
+          "border border-accent/60 bg-transparent text-accent hover:border-accent hover:bg-accent/10",
       },
       size: {
         default: "h-9 px-4 py-2",

@@ -99,7 +99,7 @@ export function MapView() {
 				})}
 			</Map>
 
-			{/* FABs — top-left overlay */}
+			{/* Layer controls FAB — top-left */}
 			<div className="absolute top-4 left-4 flex flex-col gap-2 z-10">
 				<MapLayerControls />
 			</div>

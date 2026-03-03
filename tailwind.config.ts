@@ -29,8 +29,8 @@ const config: Config = {
   			'pulse-ring': 'pulse-ring 2s ease-in-out infinite',
   		},
   		fontFamily: {
-  			sans: ['var(--font-asap-condensed)', 'sans-serif'],
-  			mono: ['var(--font-asap-condensed)', 'sans-serif'],
+  			sans: ['var(--font-inter)', 'system-ui', 'sans-serif'],
+  			mono: ['ui-monospace', 'SFMono-Regular', 'monospace'],
   		},
   		backgroundImage: {
   			'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
