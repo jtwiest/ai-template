@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import { IBM_Plex_Sans, IBM_Plex_Mono } from 'next/font/google'
 import './globals.css'
-import { Navigation } from '@/components/layout/Navigation'
 import { AppProviders } from '@/contexts'
 
 const ibmPlexSans = IBM_Plex_Sans({
@@ -32,11 +31,8 @@ export default function RootLayout({
     <html lang="en" className="dark">
       <body className={`${ibmPlexSans.variable} ${ibmPlexMono.variable} font-sans bg-background text-foreground`}>
         <AppProviders>
-          <Navigation />
-          <main className="ml-16 min-h-screen">
-            <div className="container mx-auto px-8 py-8">
-              {children}
-            </div>
+          <main className="min-h-screen">
+            {children}
           </main>
         </AppProviders>
       </body>

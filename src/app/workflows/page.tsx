@@ -47,7 +47,7 @@ export default function WorkflowsPage() {
   }
 
   return (
-    <div>
+    <div className="container mx-auto px-8 py-8">
       <h1 className="text-3xl font-bold mb-6">Workflows</h1>
 
       <Tabs defaultValue="workflows" className="space-y-4">

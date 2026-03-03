@@ -33,6 +33,13 @@ export interface Artifact {
   updatedAt: Date
 }
 
+// Map types
+export interface MapLayer {
+  id: string
+  name: string
+  description?: string
+}
+
 // Workflow types
 export type WorkflowStatus = "pending" | "running" | "completed" | "failed"
 
