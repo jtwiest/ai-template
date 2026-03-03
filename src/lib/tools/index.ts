@@ -27,3 +27,4 @@ export * from './types';
 export * from './registry';
 export * from './artifacts';
 export * from './workflows';
+export * from './airspace';
