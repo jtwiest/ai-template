@@ -305,18 +305,18 @@ className="flex-none p-[30px] border-t border-border"
 9. ✅ Build **MapView** — render map with token
 10. ✅ Build **BasemapPicker** — FAB + popover
 11. ✅ Build **LayerToggle** — FAB + popover + stub layers
-12. Add new map types to `src/lib/types.ts` (`MapSource`, `MapLayerConfig`, `MapSection`, `MapBasemap`, `MapModifier`, `MapRegion`)
-13. Create `src/lib/mapUtils.ts` — localStorage helpers + `getVisibleLayers` computation
-14. Create `src/app/api/map/route.ts` — proxy GET to Aloft API (`/v1/airspace/maps?context=airaware`)
-15. Create `src/app/api/map/geojson/[handle]/route.ts` — proxy GeoJSON source fetches (if needed for CORS)
-16. Create `src/contexts/MapContext.tsx` — state, `fetchMapData`, `toggleLayer`, `toggleSection`, `setSelectedBasemap`, GeoJSON polling
-17. Register `MapProvider` in `src/contexts/index.tsx` (wrap inside `WorkflowProvider`)
-18. Install additional shadcn/ui deps if needed (`Accordion`, `RadioGroup`)
-19. Build `src/components/main/MapLayerControls.tsx` — accordion UI replacing `LayerToggle`
-20. Update `src/components/main/BasemapPicker.tsx` — use `mapContext.basemaps` + `mapContext.setSelectedBasemap`
-21. Update `src/components/main/MapView.tsx` — render dynamic `<Source>` and `<Layer>` components from context
-22. Update `src/components/main/Main.tsx` — remove local map state, use `MapContext`
-23. Clean up: remove `src/app/api/layers/route.ts` stub and `src/components/main/LayerToggle.tsx`
+12. ✅ Add new map types to `src/lib/types.ts` (`MapSource`, `MapLayerConfig`, `MapSection`, `MapBasemap`, `MapModifier`, `MapRegion`)
+13. ✅ Create `src/lib/mapUtils.ts` — localStorage helpers + `getVisibleLayers` computation
+14. ~~Create `src/app/api/map/route.ts`~~ — **skipped** (calling Aloft API directly from client)
+15. ~~Create `src/app/api/map/geojson/[handle]/route.ts`~~ — **skipped** (same reason)
+16. ✅ Create `src/contexts/MapContext.tsx` — state, `fetchMapData`, `toggleLayer`, `toggleSection`, `setSelectedBasemap`, GeoJSON polling
+17. ✅ Register `MapProvider` in `src/contexts/index.tsx`
+18. ✅ Install `@radix-ui/react-accordion` + `@radix-ui/react-radio-group`; created `accordion.tsx` and `radio-group.tsx` shadcn wrappers
+19. ✅ Build `src/components/main/MapLayerControls.tsx` — accordion UI replacing `LayerToggle`
+20. ✅ Update `src/components/main/BasemapPicker.tsx` — context-driven, fallback to hardcoded list
+21. ✅ Update `src/components/main/MapView.tsx` — render dynamic `<Source>` and `<Layer>` from context
+22. ✅ Update `src/components/main/Main.tsx` — removed local map state, uses `MapContext`
+23. ✅ Clean up: removed `src/components/main/LayerToggle.tsx` ⬅️ NEXT PHASE
 24. Build `src/components/main/DashboardChat.tsx`
 25. Build `src/components/main/DashboardArtifacts.tsx`
 26. Build `src/components/main/GenerateReportButton.tsx`

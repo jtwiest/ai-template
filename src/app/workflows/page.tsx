@@ -57,14 +57,14 @@ export default function WorkflowsPage() {
         </TabsList>
 
         <TabsContent value="workflows" className="space-y-4">
-          <p className="text-muted-foreground">
+          <p className="text-foreground">
             Select a workflow to run with custom parameters
           </p>
           <WorkflowList workflows={workflows} onRun={handleRunWorkflow} />
         </TabsContent>
 
         <TabsContent value="history" className="space-y-4">
-          <p className="text-muted-foreground">
+          <p className="text-foreground">
             View and manage your workflow execution history
           </p>
           <WorkflowRunHistory

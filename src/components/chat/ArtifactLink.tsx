@@ -20,7 +20,7 @@ export function ArtifactLink({ artifactId, displayText, showPreview = true }: Ar
 
   if (!artifact) {
     return (
-      <span className="inline-flex items-center gap-1 text-muted-foreground">
+      <span className="inline-flex items-center gap-1 text-foreground">
         <FileText className="h-3 w-3" />
         <span className="text-xs">{displayText} (not found)</span>
       </span>
@@ -55,7 +55,7 @@ export function ArtifactLink({ artifactId, displayText, showPreview = true }: Ar
           {showPreviewContent && (
             <div className="mt-2 p-3 bg-muted/50 rounded-md border text-xs">
               <p className="font-semibold mb-1">{artifact.title}</p>
-              <div className="text-muted-foreground prose prose-sm dark:prose-invert max-w-none">
+              <div className="text-foreground prose prose-sm dark:prose-invert max-w-none">
                 {artifact.content.substring(0, 300)}
                 {artifact.content.length > 300 && '...'}
               </div>

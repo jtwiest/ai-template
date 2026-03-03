@@ -28,7 +28,7 @@ const statusColors = {
 export function WorkflowRunHistory({ runs, onViewDetails, onRerun }: WorkflowRunHistoryProps) {
   if (runs.length === 0) {
     return (
-      <div className="text-center py-12 text-muted-foreground border rounded-lg">
+      <div className="text-center py-12 text-foreground border rounded-lg">
         <p>No workflow runs yet</p>
       </div>
     )
