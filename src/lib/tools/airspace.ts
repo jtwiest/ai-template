@@ -44,7 +44,7 @@ const getAirspaceSourcesTool: AgentTool = {
 const getAirspaceSourceDataTool: AgentTool = {
   definition: {
     name: 'getAirspaceSourceData',
-    description: 'Get feature collection data from a specific airspace source within a bounding box. Returns GeoJSON features.',
+    description: 'Get feature collection data from a specific airspace source within a bounding box. Returns GeoJSON features. Max 1000 square miles.',
     input_schema: {
       type: 'object',
       properties: {

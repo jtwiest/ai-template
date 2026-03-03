@@ -1,6 +1,6 @@
 import Anthropic from '@anthropic-ai/sdk';
 import { chatStorage } from '@/lib/storage';
-import { createToolRegistry, artifactTools, workflowTools, airspaceTools, mapLayerTools } from '@/lib/tools';
+import { createToolRegistry, airspaceTools, mapLayerTools } from '@/lib/tools';
 
 // Use Node.js runtime since we need filesystem access for storage
 export const runtime = 'nodejs';
@@ -11,7 +11,7 @@ const anthropic = new Anthropic({
 });
 
 // Create tool registry with all available tool sets
-const toolRegistry = createToolRegistry([artifactTools, workflowTools, airspaceTools, mapLayerTools]);
+const toolRegistry = createToolRegistry([airspaceTools, mapLayerTools]);
 
 // Get tool definitions for the LLM
 const tools = toolRegistry.getDefinitions();
